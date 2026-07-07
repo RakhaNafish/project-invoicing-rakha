@@ -85,7 +85,9 @@ function rupiah(int $n): string
     <div class="app-wrapper">
 
         <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php
+        $activePage = 'payment';
+        include "../itu diapain/sidebar.php"; ?>
 
         <div class="content-wrapper">
             <div class="app-content p-3">
@@ -109,51 +111,58 @@ function rupiah(int $n): string
 
                 <!-- Filter Pencarian -->
                 <div class="card">
-                    <div class="card-body">
-                        <form method="GET" class="row g-3 align-items-end">
+                    <div class="card-header">
+
+                        <!-- Baris Atas -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <div class="input-group input-group-sm" style="width:280px;">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input id="searchInput" type="text" class="form-control" placeholder="Search">
+                            </div>
+
+                            <a href="pembayaran.php" class="btn btn-primary">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Add Payment
+                            </a>
+
+                        </div>
+
+                        <!-- Baris Filter -->
+                        <form method="GET" class="row g-2 align-items-end">
+
                             <div class="col-md-4">
                                 <label class="form-label">Keyword</label>
-                                <input type="text" name="keyword" class="form-control"
-                                    placeholder="No. Invoice / Customer"
-                                    value="<?= htmlspecialchars($keyword_filter) ?>">
+                                <input type="text" id="keywordFilter" class="form-control form-control-sm"
+                                    placeholder="Invoice / Customer">
                             </div>
+
                             <div class="col-md-3">
                                 <label class="form-label">Date From</label>
-                                <input type="date" name="tgl_dari" class="form-control"
-                                    value="<?= htmlspecialchars($tgl_dari_filter) ?>">
+                                <input type="date" id="dateFrom" class="form-control form-control-sm">
                             </div>
+
                             <div class="col-md-3">
                                 <label class="form-label">Date To</label>
-                                <input type="date" name="tgl_ke" class="form-control"
-                                    value="<?= htmlspecialchars($tgl_ke_filter) ?>">
+                                <input type="date" id="dateTo" class="form-control form-control-sm">
                             </div>
+
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-search me-1"></i> Search
+                                <button type="button" id="resetFilterBtn" class="btn btn-secondary btn-sm w-100">
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                    Reset
                                 </button>
                             </div>
-                            <div class="col-12">
-                                <a href="payment.php" class="btn btn-sm btn-secondary">
-                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filter
-                                </a>
-                            </div>
+
                         </form>
+
                     </div>
 
                     <?php if (count($pembayaran_filtered) > 0): ?>
 
                         <!-- Tabel List Pembayaran -->
-
-                        <div class="card-header">
-                            <h5 class="card-title mb-0 mt-3">Payment List</h5>
-                            <div class="row mt-2">
-                                <div class="col-12 d-flex justify-content-end">
-                                    <a href="pembayaran.php" class="btn btn-sm btn-primary">
-                                        <i class="bi bi-plus-lg me-1"></i> Add Payment
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover align-middle" id="tabelPembayaran">
@@ -168,7 +177,7 @@ function rupiah(int $n): string
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($pembayaran_filtered as $i => $p): ?>
+                                        <?php foreach ($pembayaran as $i => $p): ?>
                                             <tr>
                                                 <td><?= $i + 1 ?></td>
                                                 <td><?= ($p['tanggal']) ?></td>
@@ -235,55 +244,151 @@ function rupiah(int $n): string
 
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
-        // Isi modal delete sesuai data row yang diklik
-        const deleteModal = document.getElementById('deleteModal');
-        deleteModal.addEventListener('show.bs.modal', e => {
-            const btn = e.relatedTarget;
-            document.getElementById('deleteInvoiceLabel').textContent = btn.getAttribute('data-invoice');
-            document.getElementById('confirmDeleteBtn').dataset.id = btn.getAttribute('data-id');
-        });
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-            // Sambungkan ke endpoint hapus saat database tersedia
-            alert('Pembayaran ID ' + this.dataset.id + ' dihapus (dummy).');
-            bootstrap.Modal.getInstance(deleteModal).hide();
-        });
+        (() => {
 
-        // Pagination & show entries (client-side, search/filter sudah ditangani PHP via GET)
-        (function () {
-            const table = document.getElementById('tabelPembayaran');
+            const table = document.getElementById("tabelPembayaran");
             if (!table) return;
-            const tbody = table.querySelector('tbody');
-            const allRows = Array.from(tbody.querySelectorAll('tr'));
-            const showEl = document.getElementById('showEntries');
-            const pageCtrl = document.getElementById('paginationControls');
-            const pageTxt = document.getElementById('paginationText');
+
+            const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+            const globalSearch = document.getElementById("searchInput");
+            const keywordFilter = document.getElementById("keywordFilter");
+            const dateFrom = document.getElementById("dateFrom");
+            const dateTo = document.getElementById("dateTo");
+            const resetBtn = document.getElementById("resetFilterBtn");
+
+            const pageCtrl = document.getElementById("paginationControls");
+            const pageTxt = document.getElementById("paginationText");
+
+            const perPage = 10;
             let currentPage = 1;
 
-            function render() {
-                const perPage = parseInt(showEl.value);
-                const total = allRows.length;
-                const pages = Math.max(1, Math.ceil(total / perPage));
-                currentPage = Math.min(currentPage, pages);
-                const start = (currentPage - 1) * perPage;
+            function getFilteredRows() {
 
-                allRows.forEach(r => r.style.display = 'none');
-                allRows.slice(start, start + perPage).forEach(r => r.style.display = '');
+                const global = globalSearch.value.toLowerCase().trim();
+                const keyword = keywordFilter.value.toLowerCase().trim();
+                const from = dateFrom.value;
+                const to = dateTo.value;
 
-                pageTxt.textContent = total === 0
-                    ? 'Tidak ada data'
-                    : `Menampilkan ${start + 1}–${Math.min(start + perPage, total)} dari ${total} entri`;
+                return rows.filter(row => {
 
-                pageCtrl.innerHTML = '';
-                for (let p = 1; p <= pages; p++) {
-                    const li = document.createElement('li');
-                    li.className = 'page-item' + (p === currentPage ? ' active' : '');
-                    li.innerHTML = `<a class="page-link" href="#">${p}</a>`;
-                    li.addEventListener('click', e => { e.preventDefault(); currentPage = p; render(); });
-                    pageCtrl.appendChild(li);
-                }
+                    const date = row.cells[1].textContent.trim();
+                    const invoice = row.cells[2].textContent.toLowerCase();
+                    const customer = row.cells[3].textContent.toLowerCase();
+
+                    const allText = row.textContent.toLowerCase();
+
+                    const matchGlobal =
+                        global === "" ||
+                        allText.includes(global);
+
+                    const matchKeyword =
+                        keyword === "" ||
+                        invoice.includes(keyword) ||
+                        customer.includes(keyword);
+
+                    const matchFrom =
+                        from === "" ||
+                        date >= from;
+
+                    const matchTo =
+                        to === "" ||
+                        date <= to;
+
+                    return matchGlobal && matchKeyword && matchFrom && matchTo;
+
+                });
+
             }
-            showEl.addEventListener('change', () => { currentPage = 1; render(); });
-            render();
+
+            function renderTable() {
+
+                const filtered = getFilteredRows();
+
+                const total = filtered.length;
+
+                const totalPages = Math.max(1, Math.ceil(total / perPage));
+
+                if (currentPage > totalPages)
+                    currentPage = totalPages;
+
+                const start = (currentPage - 1) * perPage;
+                const end = start + perPage;
+
+                rows.forEach(row => row.style.display = "none");
+
+                filtered.slice(start, end).forEach(row => {
+                    row.style.display = "";
+                });
+
+                if (total === 0) {
+                    pageTxt.textContent = "Tidak ada data";
+                } else {
+                    pageTxt.textContent =
+                        `Menampilkan ${start + 1} - ${Math.min(end, total)} dari ${total} data`;
+                }
+
+                pageCtrl.innerHTML = "";
+
+                for (let i = 1; i <= totalPages; i++) {
+
+                    const li = document.createElement("li");
+                    li.className = "page-item" + (i === currentPage ? " active" : "");
+
+                    li.innerHTML =
+                        `<a href="#" class="page-link">${i}</a>`;
+
+                    li.onclick = function (e) {
+
+                        e.preventDefault();
+
+                        currentPage = i;
+
+                        renderTable();
+
+                    };
+
+                    pageCtrl.appendChild(li);
+
+                }
+
+            }
+
+            globalSearch.addEventListener("input", () => {
+                currentPage = 1;
+                renderTable();
+            });
+
+            keywordFilter.addEventListener("input", () => {
+                currentPage = 1;
+                renderTable();
+            });
+
+            dateFrom.addEventListener("change", () => {
+                currentPage = 1;
+                renderTable();
+            });
+
+            dateTo.addEventListener("change", () => {
+                currentPage = 1;
+                renderTable();
+            });
+
+            resetBtn.addEventListener("click", () => {
+
+                globalSearch.value = "";
+                keywordFilter.value = "";
+                dateFrom.value = "";
+                dateTo.value = "";
+
+                currentPage = 1;
+
+                renderTable();
+
+            });
+
+            renderTable();
+
         })();
     </script>
 </body>

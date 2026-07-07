@@ -155,7 +155,7 @@ $no_kwitansi = 'KW-' . date('Ym') . '-' . str_pad((string) rand(1, 999), 3, '0',
           <div class="card">
             <div class="card-body kwitansi-box">
 
-            <div class="kwitansi-logo">Xonada<br>Logo</div>
+            <div class="kwitansi-logo">ArayaStore<br>Logo</div>
             <div class="kwitansi-title">Receipt</div>
 
             <div class="kwitansi-meta">Receipt Number: <span class="dots"><?= htmlspecialchars($no_kwitansi); ?></span></div>

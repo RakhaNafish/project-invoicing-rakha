@@ -71,7 +71,10 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
     <div class="app-wrapper">
 
         <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php 
+        $activePage = 'revenue';
+        include "../itu diapain/sidebar.php"; 
+        ?>
 
         <!-- Main Content -->
         <div class="content-wrapper">

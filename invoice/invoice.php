@@ -57,27 +57,41 @@ foreach ($invoiceItems as $item) {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <style>
     @media print {
-      .app-sidebar, .app-header, .app-footer, .sidebar-overlay, #live-region {
+
+      .app-sidebar,
+      .app-header,
+      .app-footer,
+      .sidebar-overlay,
+      #live-region {
         display: none !important;
       }
-      .app-main, .content-wrapper, .app-content {
+
+      .app-main,
+      .content-wrapper,
+      .app-content {
         margin: 0 !important;
         padding: 0 !important;
       }
+
       .app-content-header {
         display: none !important;
       }
+
       .card {
         border: none !important;
         box-shadow: none !important;
       }
+
       body {
         background: #fff !important;
       }
-      .badge, .table {
+
+      .badge,
+      .table {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
+
       @page {
         margin: 1.2cm;
       }
@@ -117,21 +131,26 @@ foreach ($invoiceItems as $item) {
             <button class="btn btn-outline-secondary" onclick="window.print()">
               <i class="bi bi-printer me-1"></i> Print
             </button>
-            <a href="#" class="btn btn-outline-secondary">
+            <button class="btn btn-outline-secondary" onclick="buatPDF()">
               <i class="bi bi-download me-1"></i> PDF
+            </button>
             </a>
             <a href="edit.php" class="btn btn-warning">
               <i class="bi bi-pencil-square"></i> Edit Invoice
             </a>
             <div class="dropdown">
               <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-brilliance"></i>
+                data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i>
                 Other
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="#"><i class="bi bi-send me-1"></i> Send Invoice</a></li>
-                <li><a class="dropdown-item" href="../dashboard/pembayaran.php?no_invoice=INV-001&customer=<?= urlencode('Azura Mishimoto') ?>&total=<?= $total ?>&from=invoice"><i class="bi bi-cash-coin"></i> Pay Now</a></li>
-                <li><a class="dropdown-item" href="kwitansi.php?no_invoice=INV-001&customer=<?= urlencode('Azura Mishimoto') ?>&total=<?= $total ?>"><i class="bi bi-receipt"></i> Receipt</a></li>
+                <li><a class="dropdown-item"
+                    href="../dashboard/pembayaran.php?no_invoice=INV-001&customer=<?= urlencode('Azura Mishimoto') ?>&total=<?= $total ?>&from=invoice"><i
+                      class="bi bi-cash-coin"></i> Pay Now</a></li>
+                <li><a class="dropdown-item"
+                    href="kwitansi.php?no_invoice=INV-001&customer=<?= urlencode('Azura Mishimoto') ?>&total=<?= $total ?>"><i
+                      class="bi bi-receipt"></i> Receipt</a></li>
               </ul>
             </div>
           </div>
@@ -146,7 +165,7 @@ foreach ($invoiceItems as $item) {
                   <p class="text-secondary mb-0 small">
                     795 Folsom Ave, Suite 600<br>
                     San Francisco, CA 94107<br>
-                  vwvwvwvw@email.com
+                    vwvwvwvw@email.com
                   </p>
                 </div>
                 <div class="col-sm-6 text-sm-end">

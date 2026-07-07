@@ -66,8 +66,12 @@ $totalPage = ceil(count($items) / $perPage);
 <body class="layout-fixed fixed-header sidebar-expand-lg sidebar-collapse">
     <div class="app-wrapper">
 
+
         <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php
+        $activePage = 'item';
+        include "../itu diapain/sidebar.php";
+        ?>
 
         <!-- Main Content -->
 
@@ -78,7 +82,7 @@ $totalPage = ceil(count($items) / $perPage);
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h4>Item</h4>
+                                <h3> Data Item</h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">
@@ -99,21 +103,20 @@ $totalPage = ceil(count($items) / $perPage);
                 <div class="card">
 
                     <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                        <p class="card-title">Data Item</p>
-
-                        <div class="card-tools">
-                            <div class="input-group input-group-sm">
+                            <div class="input-group input-group-sm" style="max-width:250px;">
                                 <span class="input-group-text">
-                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                    <i class="bi bi-search"></i>
                                 </span>
-                                <input id="searchInput" type="search" class="form-control" placeholder="Filter rows…"
-                                    aria-label="Filter rows">
-                                <div style="width:10px;"></div>
-                                <a href="tambah.php" class="btn btn-primary btn-sm">
-                                    <i class="bi bi-plus-lg"></i> Add Item
-                                </a>
+                                <input id="searchInput" type="search" class="form-control"
+                                    placeholder="Search Customer">
                             </div>
+
+                            <a href="tambah.php" class="btn btn-primary">
+                                <i class="bi bi-plus-lg"></i> Add Item
+                            </a>
+
                         </div>
                     </div>
 

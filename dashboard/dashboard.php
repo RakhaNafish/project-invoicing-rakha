@@ -251,7 +251,10 @@ $growth_bulanan = persen_naik(68900000, 63000000);
     <div class="app-wrapper">
 
         <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php 
+        $activePage = 'dashboard';
+        include "../itu diapain/sidebar.php"; 
+        ?>
 
         <div class="content-wrapper">
             <div class="app-content p-3">

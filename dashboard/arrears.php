@@ -28,22 +28,6 @@ foreach ($tunggakan as &$t) {
 }
 unset($t);
 
-// Filter keyword (nama customer)
-if ($keyword_filter !== '') {
-    $tunggakan = array_values(array_filter(
-        $tunggakan,
-        fn($t) =>
-        str_contains(strtolower($t['customer']), strtolower($keyword_filter))
-    ));
-}
-
-// Opsional: hanya tampilkan yang masih ada tunggakan
-$status_filter = isset($_GET['status_filter']) ? $_GET['status_filter'] : '';
-$hanya_tunggakan = $status_filter === 'tunggakan';
-if ($hanya_tunggakan) {
-    $tunggakan = array_values(array_filter($tunggakan, fn($t) => $t['sisa_tagihan'] > 0));
-}
-
 // Urutkan dari sisa tagihan terbesar
 usort($tunggakan, fn($a, $b) => $b['sisa_tagihan'] <=> $a['sisa_tagihan']);
 
@@ -61,7 +45,7 @@ function rupiah(int $n): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arrears Report</title>
+    <title>Outstanding Balance</title>
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -97,7 +81,10 @@ function rupiah(int $n): string
     <div class="app-wrapper">
 
         <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php
+        $activePage = 'arrears';
+        include "../itu diapain/sidebar.php";
+        ?>
 
         <div class="content-wrapper">
             <div class="app-content p-3">
@@ -107,12 +94,12 @@ function rupiah(int $n): string
                     <div class="container-fluid">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h3>Customer Arrears Report</h3>
+                                <h3>Customer Overdue Report</h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">
                                     <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Arrears</li>
+                                    <li class="breadcrumb-item active">Overdue</li>
                                 </ol>
                             </div>
                         </div>
@@ -121,40 +108,54 @@ function rupiah(int $n): string
 
                 <!-- Filter -->
                 <div class="card">
-                    <div class="card-body">
-                        <form method="GET" class="row g-3 align-items-end">
-                            <div class="col-md-5">
-                                <label class="form-label">Keyword</label>
-                                <input type="text" name="keyword" class="form-control" placeholder="Customer..."
-                                    value="<?= htmlspecialchars($keyword_filter) ?>">
+                    <div class="card-header">
+
+                        <!-- Baris Atas -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <div class="input-group input-group-sm" style="width:280px;">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="globalSearch" class="form-control" placeholder="Search">
                             </div>
+
+                        </div>
+
+                        <!-- Baris Filter -->
+                        <div class="row g-2 align-items-end">
+
                             <div class="col-md-4">
+                                <label class="form-label">Keyword</label>
+                                <input type="text" id="customerSearch" class="form-control form-control-sm"
+                                    placeholder="Customer...">
+                            </div>
+
+                            <div class="col-md-5">
                                 <label class="form-label">Status</label>
-                                <select name="status_filter" class="form-select">
+                                <select id="statusFilter" class="form-select form-select-sm">
                                     <option value="">All</option>
-                                    <option value="tunggakan" <?= $status_filter === 'tunggakan' ? 'selected' : '' ?>>
-                                        Outstanding balances only
-                                    </option>
+                                    <option value="tunggakan">Outstanding balances only</option>
+                                    <option value="lunas">Already paid</option>
                                 </select>
                             </div>
+
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-search me-1"></i> Search
+                                <button type="button" id="resetFilterBtn" class="btn btn-secondary btn-sm w-100">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>
+                                    Reset Filter
                                 </button>
                             </div>
-                            <div class="col-12">
-                                <a href="arrears.php" class="btn btn-sm btn-secondary">
-                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filter
-                                </a>
-                            </div>
-                        </form>
+
+                        </div>
+
                     </div>
 
                     <?php if (count($tunggakan) > 0): ?>
 
                         <!-- Tabel Tunggakan -->
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">Arrears Details by Customer</h5>
+                            <h5 class="card-title mb-0">Overdue Details by Customer</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -175,7 +176,7 @@ function rupiah(int $n): string
                                                 : 0;
                                             $lunas = $t['sisa_tagihan'] <= 0;
                                             ?>
-                                            <tr>
+                                            <tr data-status="<?= $lunas ? 'lunas' : 'tunggakan' ?>">
                                                 <td class="fw-semibold"><?= htmlspecialchars($t['customer']) ?></td>
                                                 <td class="text-end text-success"><?= rupiah($t['total_terbayar']) ?></td>
                                                 <td class="text-end fw-semibold <?= $lunas ? '' : 'text-danger' ?>">
@@ -184,7 +185,7 @@ function rupiah(int $n): string
                                                 <td class="text-end"><?= rupiah($t['total_invoice']) ?></td>
                                                 <td class="text-center">
                                                     <span class="badge <?= $lunas ? 'text-bg-success' : 'text-bg-danger' ?>">
-                                                        <?= $lunas ? 'Paid' : 'To Be Arrears' ?>
+                                                        <?= $lunas ? 'Paid' : 'To Be Overdue' ?>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -193,7 +194,16 @@ function rupiah(int $n): string
                                 </table>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span id="paginationText" class="small text-muted"></span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="small text-muted">Show</span>
+                                    <select id="showEntries" class="form-select form-select-sm w-auto">
+                                        <option value="5">5</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                    <span id="paginationText" class="small text-muted"></span>
+                                </div>
                                 <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
                             </div>
                         </div>
@@ -223,15 +233,43 @@ function rupiah(int $n): string
             if (!table) return;
             const tbody = table.querySelector('tbody');
             const allRows = Array.from(tbody.querySelectorAll('tr'));
-            const searchEl = document.getElementById('searchInput');
+            const globalSearch = document.getElementById('globalSearch');
+            const customerSearch = document.getElementById('customerSearch');
+            const statusEl = document.getElementById('statusFilter');
             const showEl = document.getElementById('showEntries');
+            const resetBtn = document.getElementById('resetFilterBtn');
             const pageCtrl = document.getElementById('paginationControls');
             const pageTxt = document.getElementById('paginationText');
             let sortCol = -1, sortAsc = true, currentPage = 1;
 
             function filterRows() {
-                const q = searchEl.value.toLowerCase();
-                return allRows.filter(r => r.textContent.toLowerCase().includes(q));
+
+                const globalKeyword = globalSearch.value.toLowerCase();
+                const customerKeyword = customerSearch.value.toLowerCase();
+                const status = statusEl.value;
+
+                return allRows.filter(row => {
+
+                    const allText = row.textContent.toLowerCase();
+
+                    const customer = row.cells[0].textContent.toLowerCase();
+
+                    const matchGlobal =
+                        !globalKeyword ||
+                        allText.includes(globalKeyword);
+
+                    const matchCustomer =
+                        !customerKeyword ||
+                        customer.includes(customerKeyword);
+
+                    const matchStatus =
+                        !status ||
+                        row.dataset.status === status;
+
+                    return matchGlobal && matchCustomer && matchStatus;
+
+                });
+
             }
             function sortRows(rows) {
                 if (sortCol < 0) return rows;
@@ -265,8 +303,26 @@ function rupiah(int $n): string
                     pageCtrl.appendChild(li);
                 }
             }
-            searchEl.addEventListener('input', () => { currentPage = 1; render(); });
+            globalSearch.addEventListener('input', () => {
+                currentPage = 1;
+                render();
+            });
+
+            customerSearch.addEventListener('input', () => {
+                currentPage = 1;
+                render();
+            });
+            statusEl.addEventListener('change', () => { currentPage = 1; render(); });
             showEl.addEventListener('change', () => { currentPage = 1; render(); });
+            resetBtn.addEventListener('click', () => {
+                globalSearch.value = '';
+                customerSearch.value = '';
+                statusEl.value = '';
+                showEl.value = '10';
+
+                currentPage = 1;
+                render();
+            });
             table.querySelectorAll('th.sortable').forEach(th => {
                 th.style.cursor = 'pointer';
                 th.addEventListener('click', () => {

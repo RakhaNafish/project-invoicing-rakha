@@ -3,7 +3,7 @@
 $company = [
     [
         "id" => 1,
-        "name" => "Xonada",
+        "name" => "Araya Store",
         "entity" => "E-commerce",
         "email" => "Azura@gmail.com",
         "phone" => "081234567890",
@@ -15,7 +15,7 @@ $company = [
         "signature_name" => "Azura Mishimoto",
         "contact_person" => "Azura MIshimoto",
         "tin" => "01.234.567.8-901.000",
-        "website" => "www.Xonada.co.id",
+        "website" => "www.arayastore.co.id",
     ],
 ];
 
@@ -38,7 +38,10 @@ $comp = $company[0];
     <div class="app-wrapper">
 
         <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php 
+        $activePage = 'company';
+        include "../itu diapain/sidebar.php"; 
+        ?>
 
         <div class="content-wrapper">
             <div class="app-content p-3">
@@ -47,7 +50,7 @@ $comp = $company[0];
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h4><?= htmlspecialchars($comp['name']); ?></h4>
+                                <h3><?= htmlspecialchars($comp['name']); ?></h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">

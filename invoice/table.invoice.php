@@ -183,8 +183,8 @@ function rupiah(int $n): string
                             <table class="table table-striped table-hover align-middle" id="invoiceTable">
                                 <thead>
                                     <tr>
-                                        <th style="width:50px">No</th>
-                                        <th>Invoice No</th>
+                                        <th style="width:50px" class="text-center">No</th>
+                                        <th class="text-center">Invoice No</th>
                                         <th>Customer</th>
                                         <th>Issue Date</th>
                                         <th>Due Date</th>
@@ -215,8 +215,8 @@ function rupiah(int $n): string
                                         ?>
                                         <tr data-customer="<?= strtolower($inv['customer_name']) ?>"
                                             data-date="<?= $inv['invoice_date'] ?>">
-                                            <td><?= $i + 1 ?></td>
-                                            <td><?= htmlspecialchars($inv['invoice_no']) ?></td>
+                                            <td class="text-center"><?= $i + 1 ?></td>
+                                            <td class="text-center"><?= htmlspecialchars($inv['invoice_no']) ?></td>
                                             <td><?= htmlspecialchars($inv['customer_name']) ?></td>
                                             <td><?= $inv['invoice_date'] ?></td>
                                             <td><?= $inv['due_date'] ?></td>
@@ -364,37 +364,63 @@ function rupiah(int $n): string
 
             pageTxt.textContent =
                 total === 0
-                    ? "Tidak ada data"
-                    : `Menampilkan ${start + 1}–${Math.min(start + perPage, total)} dari ${total} entri`;
+                    ? "No data avaiable"
+                    : `Show ${start + 1}–${Math.min(start + perPage, total)} from ${total} data`;
 
             pageCtrl.innerHTML = "";
 
-            for (let p = 1; p <= pages; p++) {
+            function addPage(label, targetPage, opts = {}) {
 
-                const li =
-                    document.createElement("li");
+                const li = document.createElement("li");
 
                 li.className =
                     "page-item" +
-                    (p === currentPage
-                        ? " active"
-                        : "");
+                    (opts.active ? " active" : "") +
+                    (opts.disabled ? " disabled" : "");
 
-                li.innerHTML =
-                    `<a class="page-link" href="#">${p}</a>`;
-
-                li.addEventListener(
-                    "click",
-                    e => {
+                if (opts.disabled) {
+                    li.innerHTML = `<span class="page-link">${label}</span>`;
+                } else {
+                    li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+                    li.addEventListener("click", e => {
                         e.preventDefault();
-                        currentPage = p;
+                        currentPage = targetPage;
                         render();
-                    }
-                );
+                    });
+                }
 
                 pageCtrl.appendChild(li);
 
             }
+
+            // Previous
+            addPage("Previous", currentPage - 1, { disabled: currentPage <= 1 });
+
+            // Page 1
+            addPage("1", 1, { active: currentPage === 1 });
+
+            // Titik awal
+            if (currentPage > 3) {
+                addPage("...", null, { disabled: true });
+            }
+
+            // Page sekitar current
+            for (let p = Math.max(2, currentPage - 1); p <= Math.min(pages - 1, currentPage + 1); p++) {
+                addPage(String(p), p, { active: currentPage === p });
+            }
+
+            // Titik akhir
+            if (currentPage < pages - 2) {
+                addPage("...", null, { disabled: true });
+            }
+
+            // Last page
+            if (pages > 1) {
+                addPage(String(pages), pages, { active: currentPage === pages });
+            }
+
+            // Next
+            addPage("Next", currentPage + 1, { disabled: currentPage >= pages });
 
         }
 

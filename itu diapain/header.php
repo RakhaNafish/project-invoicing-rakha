@@ -1,4 +1,4 @@
-<nav class="app-header navbar navbar-expand bg-body-secondary">
+<nav class="app-header navbar navbar-expand bg-dark" data-bs-theme="dark">
     <style>
         .user-image {
             width: 32px;

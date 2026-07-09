@@ -292,16 +292,31 @@ function rupiah(int $n): string
                 allRows.forEach(r => r.style.display = 'none');
                 filtered.slice(start, start + perPage).forEach(r => r.style.display = '');
                 pageTxt.textContent = total === 0
-                    ? 'Tidak ada data'
-                    : `Menampilkan ${start + 1}–${Math.min(start + perPage, total)} dari ${total} entri`;
+                    ? 'No data avaiable'
+                    : `Show ${start + 1}–${Math.min(start + perPage, total)} from ${total} data`;
                 pageCtrl.innerHTML = '';
-                for (let p = 1; p <= pages; p++) {
+
+                function addPage(label, targetPage, opts = {}) {
                     const li = document.createElement('li');
-                    li.className = 'page-item' + (p === currentPage ? ' active' : '');
-                    li.innerHTML = `<a class="page-link" href="#">${p}</a>`;
-                    li.addEventListener('click', e => { e.preventDefault(); currentPage = p; render(); });
+                    li.className = 'page-item' + (opts.active ? ' active' : '') + (opts.disabled ? ' disabled' : '');
+                    if (opts.disabled) {
+                        li.innerHTML = `<span class="page-link">${label}</span>`;
+                    } else {
+                        li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+                        li.addEventListener('click', e => { e.preventDefault(); currentPage = targetPage; render(); });
+                    }
                     pageCtrl.appendChild(li);
                 }
+
+                addPage('Previous', currentPage - 1, { disabled: currentPage <= 1 });
+                addPage('1', 1, { active: currentPage === 1 });
+                if (currentPage > 3) addPage('...', null, { disabled: true });
+                for (let p = Math.max(2, currentPage - 1); p <= Math.min(pages - 1, currentPage + 1); p++) {
+                    addPage(String(p), p, { active: currentPage === p });
+                }
+                if (currentPage < pages - 2) addPage('...', null, { disabled: true });
+                if (pages > 1) addPage(String(pages), pages, { active: currentPage === pages });
+                addPage('Next', currentPage + 1, { disabled: currentPage >= pages });
             }
             globalSearch.addEventListener('input', () => {
                 currentPage = 1;

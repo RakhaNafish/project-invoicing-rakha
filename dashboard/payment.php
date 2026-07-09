@@ -168,9 +168,9 @@ function rupiah(int $n): string
                                 <table class="table table-striped table-hover align-middle" id="tabelPembayaran">
                                     <thead>
                                         <tr>
-                                            <th style="width:50px">No</th>
+                                            <th style="width:50px" class="text-center">No</th>
+                                            <th class="text-center">No. Inv</th>
                                             <th>Date</th>
-                                            <th>No. Inv</th>
                                             <th>Customer</th>
                                             <th class="text-end">Amount</th>
                                             <th class="text-center" style="width:130px">Action</th>
@@ -180,8 +180,8 @@ function rupiah(int $n): string
                                         <?php foreach ($pembayaran as $i => $p): ?>
                                             <tr>
                                                 <td><?= $i + 1 ?></td>
+                                                <td class="text-center"><?= htmlspecialchars($p['no_invoice']) ?></td>
                                                 <td><?= ($p['tanggal']) ?></td>
-                                                <td><?= htmlspecialchars($p['no_invoice']) ?></td>
                                                 <td><?= htmlspecialchars($p['customer']) ?></td>
                                                 <td class="text-end fw-semibold"><?= rupiah($p['nominal']) ?></td>
                                                 <td class="text-center">
@@ -205,7 +205,6 @@ function rupiah(int $n): string
                                 <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
                             </div>
                         </div>
-                        </>
                     </div>
 
                 <?php else: ?>
@@ -322,35 +321,66 @@ function rupiah(int $n): string
                 });
 
                 if (total === 0) {
-                    pageTxt.textContent = "Tidak ada data";
+                    pageTxt.textContent = "No data avaiable";
                 } else {
                     pageTxt.textContent =
-                        `Menampilkan ${start + 1} - ${Math.min(end, total)} dari ${total} data`;
+                        `Show ${start + 1} - ${Math.min(end, total)} from ${total} data`;
                 }
 
                 pageCtrl.innerHTML = "";
 
-                for (let i = 1; i <= totalPages; i++) {
+                function addPage(label, targetPage, opts = {}) {
 
                     const li = document.createElement("li");
-                    li.className = "page-item" + (i === currentPage ? " active" : "");
 
-                    li.innerHTML =
-                        `<a href="#" class="page-link">${i}</a>`;
+                    li.className =
+                        "page-item" +
+                        (opts.active ? " active" : "") +
+                        (opts.disabled ? " disabled" : "");
 
-                    li.onclick = function (e) {
-
-                        e.preventDefault();
-
-                        currentPage = i;
-
-                        renderTable();
-
-                    };
+                    if (opts.disabled) {
+                        li.innerHTML = `<span class="page-link">${label}</span>`;
+                    } else {
+                        li.innerHTML = `<a href="#" class="page-link">${label}</a>`;
+                        li.onclick = function (e) {
+                            e.preventDefault();
+                            currentPage = targetPage;
+                            renderTable();
+                        };
+                    }
 
                     pageCtrl.appendChild(li);
 
                 }
+
+                // Previous
+                addPage("Previous", currentPage - 1, { disabled: currentPage <= 1 });
+
+                // Page 1
+                addPage("1", 1, { active: currentPage === 1 });
+
+                // Titik awal
+                if (currentPage > 3) {
+                    addPage("...", null, { disabled: true });
+                }
+
+                // Page sekitar current
+                for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                    addPage(String(i), i, { active: currentPage === i });
+                }
+
+                // Titik akhir
+                if (currentPage < totalPages - 2) {
+                    addPage("...", null, { disabled: true });
+                }
+
+                // Last page
+                if (totalPages > 1) {
+                    addPage(String(totalPages), totalPages, { active: currentPage === totalPages });
+                }
+
+                // Next
+                addPage("Next", currentPage + 1, { disabled: currentPage >= totalPages });
 
             }
 

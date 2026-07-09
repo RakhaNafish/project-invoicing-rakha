@@ -37,19 +37,7 @@ $items = [
 
 ];
 
-$perPage = 10;
-
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
-$start = ($page - 1) * $perPage;
-
-$dataTampil = array_slice($items, $start, $perPage);
-
-$totalPage = ceil(count($items) / $perPage);
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -82,7 +70,7 @@ $totalPage = ceil(count($items) / $perPage);
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h3> Data Item</h3>
+                                <h3 class="card-title">Data Item</h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">
@@ -110,7 +98,7 @@ $totalPage = ceil(count($items) / $perPage);
                                     <i class="bi bi-search"></i>
                                 </span>
                                 <input id="searchInput" type="search" class="form-control"
-                                    placeholder="Search Customer">
+                                    placeholder="Search Item">
                             </div>
 
                             <a href="tambah.php" class="btn btn-primary">
@@ -121,90 +109,41 @@ $totalPage = ceil(count($items) / $perPage);
                     </div>
 
                     <div class="card-body">
-                        <table id="itemTable" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">ID</th>
-                                    <th class="text-center">Ref No</th>
-                                    <th>Name</th>
-                                    <th class="text-end">Price</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($dataTampil as $item): ?>
+                        <div class="table-responsive">
+                            <table id="itemTable" class="table table-striped table-hover align-middle">
+                                <thead>
                                     <tr>
-                                        <td class="text-center"><?= $item['id']; ?></td>
-                                        <td class="text-center"><?= $item['ref_no']; ?></td>
-                                        <td><?= $item['name']; ?></td>
-                                        <td class="text-end">Rp <?= number_format($item['price']); ?></td>
-                                        <td class="text-center">
-                                            <a href="edit.php?id=<?= $item['id']; ?>" class="btn btn-warning btn-sm">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
-                                        </td>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Ref No</th>
+                                        <th>Name</th>
+                                        <th class="text-end">Price</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
+                                </thead>
 
-                                <?php endforeach; ?>
+                                <tbody>
+                                    <?php foreach ($items as $i => $item): ?>
+                                        <tr>
+                                            <td class="text-center"><?= $i + 1; ?></td>
+                                            <td class="text-center"><?= $item['ref_no']; ?></td>
+                                            <td><?= $item['name']; ?></td>
+                                            <td class="text-end"><?= 'Rp ' . number_format($item['price']); ?></td>
+                                            <td class="text-center">
+                                                <a href="edit.php?id=<?= $item['id']; ?>" class="btn btn-warning btn-sm">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
 
-                            </tbody>
+                                    <?php endforeach; ?>
 
-                        </table>
-                        <div class="mt-3 d-flex justify-content-end">
-                            <ul class="pagination pagination-sm m-0">
+                                </tbody>
 
-                                <!-- Previous -->
-                                <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page - 1 ?>">
-                                        Previous
-                                    </a>
-                                </li>
-
-                                <!-- Page 1 -->
-                                <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=1">1</a>
-                                </li>
-
-                                <!-- Titik awal -->
-                                <?php if ($page > 3): ?>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
-                                    </li>
-                                <?php endif; ?>
-
-                                <!-- Page sekitar current -->
-                                <?php for ($i = max(2, $page - 1); $i <= min($totalPage - 1, $page + 1); $i++): ?>
-                                    <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                        <a class="page-link" href="?page=<?= $i ?>">
-                                            <?= $i ?>
-                                        </a>
-                                    </li>
-                                <?php endfor; ?>
-
-                                <!-- Titik akhir -->
-                                <?php if ($page < $totalPage - 2): ?>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
-                                    </li>
-                                <?php endif; ?>
-
-                                <!-- Last Page -->
-                                <?php if ($totalPage > 1): ?>
-                                    <li class="page-item <?= ($page == $totalPage) ? 'active' : '' ?>">
-                                        <a class="page-link" href="?page=<?= $totalPage ?>">
-                                            <?= $totalPage ?>
-                                        </a>
-                                    </li>
-                                <?php endif; ?>
-
-                                <!-- Next -->
-                                <li class="page-item <?= ($page >= $totalPage) ? 'disabled' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page + 1 ?>">
-                                        Next
-                                    </a>
-                                </li>
-                            </ul>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span id="paginationText" class="small text-muted"></span>
+                            <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
                         </div>
                     </div>
                 </div>
@@ -217,25 +156,119 @@ $totalPage = ceil(count($items) / $perPage);
     </div>
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
-        document.getElementById('searchInput').addEventListener('keyup', function () {
+        const searchInput = document.getElementById("searchInput");
 
-            let keyword = this.value.toLowerCase();
+        const table = document.getElementById("itemTable");
+        const tbody = table.querySelector("tbody");
 
-            let rows = document.querySelectorAll('#itemTable tbody tr');
+        const allRows = Array.from(tbody.querySelectorAll("tr"));
 
-            rows.forEach(function (row) {
+        const pageCtrl = document.getElementById("paginationControls");
+        const pageTxt = document.getElementById("paginationText");
 
-                let text = row.textContent.toLowerCase();
+        const perPage = 10;
+        let currentPage = 1;
 
-                if (text.indexOf(keyword) > -1) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+        function getFilteredRows() {
+
+            const keyword = searchInput.value.toLowerCase();
+
+            return allRows.filter(row => {
+
+                const text = row.textContent.toLowerCase();
+
+                if (keyword && text.indexOf(keyword) === -1)
+                    return false;
+
+                return true;
 
             });
 
+        }
+
+        function render() {
+
+            const filteredRows = getFilteredRows();
+
+            const total = filteredRows.length;
+
+            const pages = Math.max(1, Math.ceil(total / perPage));
+
+            currentPage = Math.min(currentPage, pages);
+
+            const start = (currentPage - 1) * perPage;
+
+            allRows.forEach(row => {
+                row.style.display = "none";
+            });
+
+            filteredRows
+                .slice(start, start + perPage)
+                .forEach(row => {
+                    row.style.display = "";
+                });
+
+            pageTxt.textContent =
+                total === 0
+                    ? "No data avaiable"
+                    : `Show ${start + 1}–${Math.min(start + perPage, total)} from ${total} data`;
+
+            pageCtrl.innerHTML = "";
+
+            function addPage(label, targetPage, opts = {}) {
+
+                const li = document.createElement("li");
+
+                li.className =
+                    "page-item" +
+                    (opts.active ? " active" : "") +
+                    (opts.disabled ? " disabled" : "");
+
+                if (opts.disabled) {
+                    li.innerHTML = `<span class="page-link">${label}</span>`;
+                } else {
+                    li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+                    li.addEventListener("click", e => {
+                        e.preventDefault();
+                        currentPage = targetPage;
+                        render();
+                    });
+                }
+
+                pageCtrl.appendChild(li);
+
+            }
+
+            addPage("Previous", currentPage - 1, { disabled: currentPage <= 1 });
+
+            addPage("1", 1, { active: currentPage === 1 });
+
+            if (currentPage > 3) {
+                addPage("...", null, { disabled: true });
+            }
+
+            for (let p = Math.max(2, currentPage - 1); p <= Math.min(pages - 1, currentPage + 1); p++) {
+                addPage(String(p), p, { active: currentPage === p });
+            }
+
+            if (currentPage < pages - 2) {
+                addPage("...", null, { disabled: true });
+            }
+
+            if (pages > 1) {
+                addPage(String(pages), pages, { active: currentPage === pages });
+            }
+
+            addPage("Next", currentPage + 1, { disabled: currentPage >= pages });
+
+        }
+
+        searchInput.addEventListener("input", () => {
+            currentPage = 1;
+            render();
         });
+
+        render();
     </script>
 </body>
 

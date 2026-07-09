@@ -1,144 +1,89 @@
 <?php
 
-// ============================
-// DUMMY DATA - Revenue Dashboard
-// ============================
+// ============================================================
+// DASHBOARD DATA — dummy, replace with real DB queries
+// ============================================================
 
-$tahun_aktif = (int) date('Y');
-$bulan_aktif = (int) date('n');
-$tanggal_aktif = date('Y-m-d');
+$active_year = (int) date('Y');
+$active_month = (int) date('n');
 
-$bulan_nama = [
-    1 => 'Jan',
-    2 => 'Feb',
-    3 => 'Mar',
-    4 => 'Apr',
-    5 => 'May',
-    6 => 'Jun',
-    7 => 'Jul',
-    8 => 'Aug',
-    9 => 'Sep',
-    10 => 'Oct',
-    11 => 'Nov',
-    12 => 'Dec'
-];
-$bulan_nama_full = [
-    1 => 'January',
-    2 => 'February',
-    3 => 'March',
-    4 => 'April',
-    5 => 'May',
-    6 => 'June',
-    7 => 'July',
-    8 => 'August',
-    9 => 'September',
-    10 => 'October',
-    11 => 'November',
-    12 => 'December'
-];
+$month_short = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'Jul',8=>'Aug',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec'];
+$month_full  = [1=>'January',2=>'February',3=>'March',4=>'April',5=>'May',6=>'June',7=>'July',8=>'August',9=>'September',10=>'October',11=>'November',12=>'December'];
 
-// ── Daily (today per hour) ──────────────────────────────
-$omset_harian_total = 25500000;
-$invoice_harian = 13;
-$item_harian = 41;
-$omset_harian_jam = [1250000, 450000, 3200000, 900000, 2100000, 750000, 4800000, 300000, 1500000, 2250000, 5600000, 450000, 1900000];
-$jam_labels = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+// ── 1. KPI SUMMARY (max 4 cards) ─────────────────────────────
+// These 4 numbers answer: "how's revenue today, do I have unpaid
+// invoices, how busy is the business, and is it growing." Nothing
+// beyond that goes here — extra KPIs belong on the Report page.
+$revenue_today       = 25500000;  $revenue_yesterday      = 21000000;
+$outstanding_total    = 18400000;  $outstanding_total_prev = 15200000;
+$outstanding_count    = 9;
+$invoice_this_month   = 195;       $invoice_last_month     = 210;
+$total_customer       = 342;       $total_customer_prev     = 331;
 
-// ── Weekly (this week per day) ────────────────────────
-$omset_mingguan_total = 41600000;
-$invoice_mingguan = 90;
-$item_mingguan = 270;
-$omset_per_hari = [3850000, 5200000, 2950000, 7800000, 9500000, 8200000, 4100000];
-$hari_labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+// ── 2. REVENUE ANALYTICS (single main chart) ─────────────────
+$revenue_hourly = [1250000,450000,3200000,900000,2100000,750000,4800000,300000,1500000,2250000,5600000,450000,1900000];
+$hour_labels = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
 
-// ── Monthly (this month per date) ──────────────────────
-$omset_bulanan_total = 68900000;
-$invoice_bulanan = 195;
-$item_bulanan = 587;
-$omset_per_tanggal = [
-    850000,
-    1200000,
-    950000,
-    2100000,
-    // 1800000,
-    // 3200000,
-    // 2750000,
-    // 1100000,
-    // 1400000,
-    // 980000,
-    // 2300000,
-    // 1950000,
-    // 2800000,
-    // 3100000,
-    // 900000,
-    // 1600000,
-    // 2050000,
-    // 1750000,
-    // 2900000,
-    // 3400000,
-    // 2200000,
-    // 1300000,
-    // 1500000,
-    // 2600000,
-    // 1850000,
-    // 3050000,
-    // 2400000,
-    // 1700000,
-    // 2100000,
-    2800000
-];
-$bulan_labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'];
+$revenue_daily_week = [3850000,5200000,2950000,7800000,9500000,8200000,4100000];
+$day_labels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
-// ── Last 12 months (for main line chart) ────────────
-$omset_12bulan = [42000000, 38000000, 55000000, 49000000, 61000000, 58000000, 72000000, 65000000, 70000000, 63000000, 75000000, 68900000];
-$label_12bulan = [];
+$revenue_daily_month = [850000,1200000,950000,2100000,1800000,3200000,2750000,1100000,1400000,980000,2300000,1950000,2800000,3100000,900000,1600000,2050000,1750000,2900000,3400000,2200000,1300000,1500000,2600000,1850000,3050000,2400000,1700000,2100000,2800000];
+$date_labels = range(1, count($revenue_daily_month));
+
+$revenue_12_months = [42000000,38000000,55000000,49000000,61000000,58000000,72000000,65000000,70000000,63000000,75000000,68900000];
+$month_12_labels = [];
 for ($i = 11; $i >= 0; $i--) {
-    $m = $bulan_aktif - $i;
-    $y = $tahun_aktif;
-    if ($m <= 0) {
-        $m += 12;
-        $y--;
-    }
-    $label_12bulan[] = $bulan_nama[$m] . ' ' . $y;
+    $m = $active_month - $i; $y = $active_year;
+    if ($m <= 0) { $m += 12; $y--; }
+    $month_12_labels[] = $month_short[$m] . ' ' . $y;
 }
 
-// ── Top 5 best-selling products ─────────────────────────
-$top_produk = [
-    ['nama' => 'Laptop Asus VivoBook', 'terjual' => 42, 'omset' => 31500000, 'pct' => 46],
-    ['nama' => 'Smartphone Samsung', 'terjual' => 35, 'omset' => 14000000, 'pct' => 38],
-    ['nama' => 'Monitor LG 24 Inch', 'terjual' => 28, 'omset' => 5040000, 'pct' => 30],
-    ['nama' => 'Printer Epson L3210', 'terjual' => 21, 'omset' => 4620000, 'pct' => 23],
-    ['nama' => 'Gaming Headset', 'terjual' => 18, 'omset' => 630000, 'pct' => 19],
+// ── 3. BUSINESS ALERTS (only shown when something needs action) ─
+// Empty array = "No urgent business alerts." Keep this list short;
+// it should only contain things that cost money if ignored.
+$business_alerts = [
+    ['level' => 'danger',  'icon' => 'bi-exclamation-octagon', 'title' => '14 invoices overdue',   'desc' => 'Rp 6,600,000 unpaid, past due date.'],
+    ['level' => 'danger',  'icon' => 'bi-calendar-x',          'title' => '4 invoices due today',  'desc' => 'Rp 2,100,000 due for collection today.'],
+    ['level' => 'warning', 'icon' => 'bi-box-seam',            'title' => 'Stock running low',     'desc' => 'Monitor LG 24" has only 3 units left.'],
+    ['level' => 'warning', 'icon' => 'bi-person-x',            'title' => 'Customers paying late', 'desc' => '3 customers overdue for more than 30 days.'],
 ];
 
-// ── Recent transactions ─────────────────────────────────
-$transaksi_terbaru = [
-    ['no' => 'INV-013', 'customer' => 'Teguh Wibowo', 'total' => 1900000, 'waktu' => '20:00', 'status' => 'Pending'],
-    ['no' => 'INV-012', 'customer' => 'Laila Sari', 'total' => 450000, 'waktu' => '19:10', 'status' => 'Paid'],
-    ['no' => 'INV-011', 'customer' => 'Fajar Nugroho', 'total' => 5600000, 'waktu' => '18:20', 'status' => 'Paid'],
-    ['no' => 'INV-010', 'customer' => 'Maya Anggraini', 'total' => 2250000, 'waktu' => '17:00', 'status' => 'Paid'],
-    ['no' => 'INV-009', 'customer' => 'Doni Setiawan', 'total' => 1500000, 'waktu' => '16:45', 'status' => 'Paid'],
-    ['no' => 'INV-008', 'customer' => 'Rina Kusuma', 'total' => 300000, 'waktu' => '15:10', 'status' => 'Pending'],
-    ['no' => 'INV-007', 'customer' => 'Hendra Wijaya', 'total' => 4800000, 'waktu' => '14:30', 'status' => 'Paid'],
+// ── 4. TOP SELLING PRODUCTS (top 5 only) ─────────────────────
+$top_products = [
+    ['name' => 'Laptop Asus VivoBook', 'sold' => 42, 'revenue' => 31500000],
+    ['name' => 'Smartphone Samsung',    'sold' => 35, 'revenue' => 14000000],
+    ['name' => 'Monitor LG 24 Inch',    'sold' => 28, 'revenue' => 5040000],
+    ['name' => 'Printer Epson L3210',   'sold' => 21, 'revenue' => 4620000],
+    ['name' => 'Gaming Headset',        'sold' => 18, 'revenue' => 630000],
 ];
 
-function rupiah(int $n): string
-{
-    return 'Rp ' . number_format($n, 0, ',', '.');
-}
-function persen_naik(int $a, int $b): string
-{
-    // a = current, b = previous
-    if ($b === 0)
-        return '+0%';
+// ── 5. RECENT TRANSACTIONS (max 5) ────────────────────────────
+$recent_transactions = [
+    ['no' => 'INV-013', 'customer' => 'Teguh Wibowo',  'total' => 1900000, 'status' => 'Pending'],
+    ['no' => 'INV-012', 'customer' => 'Laila Sari',     'total' => 450000,  'status' => 'Paid'],
+    ['no' => 'INV-011', 'customer' => 'Fajar Nugroho',  'total' => 5600000, 'status' => 'Paid'],
+    ['no' => 'INV-010', 'customer' => 'Maya Anggraini', 'total' => 2250000, 'status' => 'Paid'],
+    ['no' => 'INV-009', 'customer' => 'Doni Setiawan',  'total' => 1500000, 'status' => 'Overdue'],
+];
+
+function rupiah(int $n): string { return 'Rp ' . number_format($n, 0, ',', '.'); }
+function pct_change(int $a, int $b): string {
+    if ($b === 0) return '+0%';
     $p = round(($a - $b) / $b * 100, 1);
     return ($p >= 0 ? '+' : '') . $p . '%';
 }
+function trend_class(int $a, int $b, bool $lowerIsBetter = false): string {
+    $good = $lowerIsBetter ? $a <= $b : $a >= $b;
+    return $good ? 'trend-up' : 'trend-down';
+}
+function trend_icon(int $a, int $b): string {
+    return $a >= $b ? 'bi-arrow-up-short' : 'bi-arrow-down-short';
+}
 
-// Growth badges (vs previous period - dummy)
-$growth_harian = persen_naik(25500000, 21000000);
-$growth_mingguan = persen_naik(41600000, 38200000);
-$growth_bulanan = persen_naik(68900000, 63000000);
+$change_revenue     = pct_change($revenue_today, $revenue_yesterday);
+$change_outstanding = pct_change($outstanding_total, $outstanding_total_prev);
+$change_invoice     = pct_change($invoice_this_month, $invoice_last_month);
+$change_customer    = pct_change($total_customer, $total_customer_prev);
 
 ?>
 <!DOCTYPE html>
@@ -153,96 +98,43 @@ $growth_bulanan = persen_naik(68900000, 63000000);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        .stat-card {
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
-            transition: transform .15s;
-        }
+        /* ── Base rhythm ─────────────────────────────────────── */
+        .app-content { padding-bottom: 2rem; }
+        .dash-section { margin-bottom: 2rem; }
+        .dash-section-title { font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--bs-secondary-color); margin-bottom: .9rem; }
 
-        .stat-card:hover {
-            transform: translateY(-2px);
-        }
+        /* ── KPI cards ───────────────────────────────────────── */
+        .kpi-card { border: 1px solid var(--bs-border-color); }
+        .kpi-card .card-body { padding: 1.25rem 1.35rem; }
+        .kpi-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+        .kpi-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+        .kpi-label { font-size: .78rem; color: var(--bs-secondary-color); font-weight: 500; }
+        .trend { font-size: .8rem; font-weight: 600; display: inline-flex; align-items: center; }
+        .trend-up { color: #2fb380; }
+        .trend-down { color: #e05260; }
 
-        .chart-card {
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
-        }
+        /* ── Alerts ──────────────────────────────────────────── */
+        .alert-row { border-left: 3px solid; padding: .7rem 1rem; border-radius: 6px; display: flex; gap: .75rem; align-items: flex-start; }
+        .alert-row.level-danger { border-left-color: #e05260; background: rgba(224,82,96,.07); }
+        .alert-row.level-warning { border-left-color: #d9a441; background: rgba(217,164,65,.07); }
+        .no-alerts { display: flex; align-items: center; gap: .6rem; color: #2fb380; padding: .6rem 0; }
 
-        .growth-badge {
-            font-size: .75rem;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 20px;
-        }
+        /* ── Chart card ──────────────────────────────────────── */
+        .period-tab .nav-link { border-radius: 6px; font-size: .82rem; padding: 4px 12px; color: var(--bs-secondary-color); }
+        .period-tab .nav-link.active { background: var(--bs-primary); color: #fff; }
 
-        .growth-up {
-            background: rgba(25, 135, 84, .2);
-            color: #1cbb78;
-        }
+        /* ── Top products ────────────────────────────────────── */
+        .product-row { display: flex; align-items: center; gap: .85rem; padding: .65rem 0; }
+        .product-row + .product-row { border-top: 1px solid var(--bs-border-color); }
+        .product-rank { width: 24px; height: 24px; border-radius: 6px; background: var(--bs-tertiary-bg); font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-        .growth-down {
-            background: rgba(220, 53, 69, .2);
-            color: #e35d6a;
-        }
-
-        .progress-bar-anim {
-            transition: width .6s ease;
-        }
-
-        .top-product-row {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, .06);
-        }
-
-        .top-product-row:last-child {
-            border-bottom: none;
-        }
-
-        .period-tab .nav-link {
-            border-radius: 6px;
-            font-size: .85rem;
-            padding: 4px 14px;
-        }
-
-        .period-tab .nav-link.active {
-            background: #0d6efd;
-            color: #fff;
-        }
-
-        .mini-chart-wrap {
-            position: relative;
-            height: 70px;
-        }
+        /* ── Cards general ───────────────────────────────────── */
+        .card { border: 1px solid var(--bs-border-color); box-shadow: none; }
+        .card-header { background: transparent; border-bottom: 1px solid var(--bs-border-color); }
 
         @media (max-width: 767.98px) {
-            .content-header h3 {
-                font-size: 1.25rem;
-            }
-
-            .content-header .row.mt-2 .col-12 {
-                justify-content: center !important;
-                flex-wrap: wrap;
-            }
-
-            .card-header {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-
-            .period-tab {
-                width: 100%;
-                justify-content: flex-start;
-                overflow-x: auto;
-                flex-wrap: nowrap;
-            }
-
-            #mainChart {
-                min-height: 220px;
-            }
-
-            .top-product-row .small {
-                font-size: .75rem;
-            }
+            .period-tab { overflow-x: auto; flex-wrap: nowrap; }
+            .card-header { flex-wrap: wrap; gap: .5rem; }
         }
     </style>
 </head>
@@ -251,309 +143,190 @@ $growth_bulanan = persen_naik(68900000, 63000000);
     <div class="app-wrapper">
 
         <?php include "../itu diapain/header.php"; ?>
-        <?php 
-        $activePage = 'dashboard';
-        include "../itu diapain/sidebar.php"; 
-        ?>
+        <?php $activePage = 'dashboard'; include "../itu diapain/sidebar.php"; ?>
 
         <div class="content-wrapper">
             <div class="app-content p-3">
 
                 <!-- Page Header -->
-                <div class="content-header px-3 pt-3">
+                <div class="content-header px-3 pt-3 pb-2">
                     <div class="container-fluid">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
                                 <h3 class="mb-0">Dashboard</h3>
-                                <small class="text-muted">
-                                    <?= date('l, d') ?> <?= $bulan_nama_full[$bulan_aktif] ?> <?= $tahun_aktif ?>
-                                </small>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-end mb-0">
-                                    <li class="breadcrumb-item active">Dashboard</li>
-                                </ol>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12 d-flex justify-content-end gap-2">
-                                <a href="../revenue/daily.php" class="btn btn-sm btn-outline-secondary"><i
-                                        class="bi bi-calendar-day me-1"></i>Daily</a>
-                                <a href="../revenue/weekly.php" class="btn btn-sm btn-outline-secondary"><i
-                                        class="bi bi-calendar-week me-1"></i>Weekly</a>
-                                <a href="../revenue/monthly.php" class="btn btn-sm btn-outline-secondary"><i
-                                        class="bi bi-calendar-month me-1"></i>Monthly</a>
+                                <small class="text-muted"><?= date('l, d') ?> <?= $month_full[$active_month] ?> <?= $active_year ?></small>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="container-fluid mt-3">
+                <div class="container-fluid mt-2">
 
-                    <!-- ══ ROW 1: 3 Stat Cards ══════════════════════════════════ -->
-                    <div class="row g-3 mb-4">
-
-                        <!-- Daily -->
-                        <div class="col-12 col-md-4">
-                            <div class="card stat-card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Today's Revenue
-                                            </p>
-                                            <h4 class="mb-0 fw-bold"><?= rupiah($omset_harian_total) ?></h4>
+                    <!-- ══ 1. KPI SUMMARY ═══════════════════════════════════ -->
+                    <div class="dash-section">
+                        <div class="row g-3">
+                            <div class="col-6 col-lg-3">
+                                <div class="card kpi-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="kpi-icon" style="background:rgba(47,179,128,.15)"><i class="bi bi-cash-coin" style="color:#2fb380"></i></span>
+                                            <span class="trend <?= trend_class($revenue_today, $revenue_yesterday) ?>"><i class="bi <?= trend_icon($revenue_today, $revenue_yesterday) ?>"></i><?= $change_revenue ?></span>
                                         </div>
-                                        <span class="p-2 rounded bg-success bg-opacity-25">
-                                            <i class="bi bi-sun fs-4 text-success"></i>
-                                        </span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <span class="growth-badge growth-up"><?= $growth_harian ?></span>
-                                        <small class="text-muted">vs yesterday</small>
-                                    </div>
-                                    <div class="row text-center g-0 border-top pt-2">
-                                        <div class="col border-end">
-                                            <div class="fw-semibold"><?= $invoice_harian ?></div>
-                                            <small class="text-muted">Invoice</small>
-                                        </div>
-                                        <div class="col">
-                                            <div class="fw-semibold"><?= $item_harian ?></div>
-                                            <small class="text-muted">Items</small>
-                                        </div>
-                                    </div>
-                                    <div class="mini-chart-wrap mt-3">
-                                        <canvas id="miniChartHarian"></canvas>
-                                    </div>
-                                    <div class="mt-2 text-end">
-                                        <a href="../revenue/daily.php" class="btn btn-sm btn-outline-success">
-                                            Detail <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                        <div class="kpi-value"><?= rupiah($revenue_today) ?></div>
+                                        <div class="kpi-label">Today's Revenue</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Weekly -->
-                        <div class="col-12 col-md-4">
-                            <div class="card stat-card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <p class="text-muted mb-1 small text-uppercase fw-semibold">This Week's
-                                                Revenue
-                                            </p>
-                                            <h4 class="mb-0 fw-bold"><?= rupiah($omset_mingguan_total) ?></h4>
+                            <div class="col-6 col-lg-3">
+                                <div class="card kpi-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="kpi-icon" style="background:rgba(217,164,65,.15)"><i class="bi bi-hourglass-split" style="color:#d9a441"></i></span>
+                                            <span class="trend <?= trend_class($outstanding_total, $outstanding_total_prev, true) ?>"><i class="bi <?= trend_icon($outstanding_total, $outstanding_total_prev) ?>"></i><?= $change_outstanding ?></span>
                                         </div>
-                                        <span class="p-2 rounded bg-primary bg-opacity-25">
-                                            <i class="bi bi-calendar-week fs-4 text-primary"></i>
-                                        </span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <span class="growth-badge growth-up"><?= $growth_mingguan ?></span>
-                                        <small class="text-muted">vs last week</small>
-                                    </div>
-                                    <div class="row text-center g-0 border-top pt-2">
-                                        <div class="col border-end">
-                                            <div class="fw-semibold"><?= $invoice_mingguan ?></div>
-                                            <small class="text-muted">Invoice</small>
-                                        </div>
-                                        <div class="col">
-                                            <div class="fw-semibold"><?= $item_mingguan ?></div>
-                                            <small class="text-muted">Items</small>
-                                        </div>
-                                    </div>
-                                    <div class="mini-chart-wrap mt-3">
-                                        <canvas id="miniChartMingguan"></canvas>
-                                    </div>
-                                    <div class="mt-2 text-end">
-                                        <a href="../revenue/weekly.php" class="btn btn-sm btn-outline-primary">
-                                            Detail <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                        <div class="kpi-value"><?= rupiah($outstanding_total) ?></div>
+                                        <div class="kpi-label">Outstanding Invoice · <?= $outstanding_count ?> unpaid</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Monthly -->
-                        <div class="col-12 col-md-4">
-                            <div class="card stat-card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <p class="text-muted mb-1 small text-uppercase fw-semibold">
-                                                <?= $bulan_nama_full[$bulan_aktif] ?> Revenue
-                                            </p>
-                                            <h4 class="mb-0 fw-bold"><?= rupiah($omset_bulanan_total) ?></h4>
+                            <div class="col-6 col-lg-3">
+                                <div class="card kpi-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="kpi-icon" style="background:rgba(108,142,235,.15)"><i class="bi bi-file-earmark-text" style="color:#6c8eeb"></i></span>
+                                            <span class="trend <?= trend_class($invoice_this_month, $invoice_last_month) ?>"><i class="bi <?= trend_icon($invoice_this_month, $invoice_last_month) ?>"></i><?= $change_invoice ?></span>
                                         </div>
-                                        <span class="p-2 rounded bg-danger bg-opacity-25">
-                                            <i class="bi bi-calendar-month fs-4 text-danger"></i>
-                                        </span>
+                                        <div class="kpi-value"><?= $invoice_this_month ?></div>
+                                        <div class="kpi-label">Total Invoice · this month</div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <span class="growth-badge growth-up"><?= $growth_bulanan ?></span>
-                                        <small class="text-muted">vs last month</small>
-                                    </div>
-                                    <div class="row text-center g-0 border-top pt-2">
-                                        <div class="col border-end">
-                                            <div class="fw-semibold"><?= $invoice_bulanan ?></div>
-                                            <small class="text-muted">Invoice</small>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-lg-3">
+                                <div class="card kpi-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="kpi-icon" style="background:rgba(160,120,235,.15)"><i class="bi bi-people" style="color:#a078eb"></i></span>
+                                            <span class="trend <?= trend_class($total_customer, $total_customer_prev) ?>"><i class="bi <?= trend_icon($total_customer, $total_customer_prev) ?>"></i><?= $change_customer ?></span>
                                         </div>
-                                        <div class="col">
-                                            <div class="fw-semibold"><?= $item_bulanan ?></div>
-                                            <small class="text-muted">Items</small>
-                                        </div>
-                                    </div>
-                                    <div class="mini-chart-wrap mt-3">
-                                        <canvas id="miniChartBulanan"></canvas>
-                                    </div>
-                                    <div class="mt-2 text-end">
-                                        <a href="../revenue/monthly.php" class="btn btn-sm btn-outline-danger">
-                                            Detail <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                        <div class="kpi-value"><?= $total_customer ?></div>
+                                        <div class="kpi-label">Total Customer</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ══ ROW 2: Main Chart + Top Products ═══════════════════════ -->
-                    <div class="row g-3 mb-4">
-
-                        <!-- Main chart 12 months -->
-                        <div class="col-12 col-xl-8">
-                            <div class="card chart-card h-100">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="card-title mb-0">
-                                        <i class="bi bi-graph-up me-2 text-primary"></i>12-Month Revenue Trend
-                                    </h6>
-                                    <!-- Period switcher -->
-                                    <ul class="nav period-tab gap-1" id="periodTab">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="#" data-period="harian">Daily</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-period="mingguan">Weekly</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-period="bulanan">Monthly</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="mainChart" height="110"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Top 5 products -->
-                        <div class="col-12 col-xl-4">
-                            <div class="card chart-card h-100">
-                                <div class="card-header">
-                                    <h6 class="card-title mb-0">
-                                        <i class="bi bi-trophy me-2 text-warning"></i>Top 5 Best-Selling Products
-                                    </h6>
-                                </div>
-                                <div class="card-body py-2">
-                                    <?php foreach ($top_produk as $i => $p): ?>
-                                        <div class="top-product-row">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <span class="badge rounded-pill text-bg-secondary"
-                                                        style="width:22px;height:22px;line-height:14px;text-align:center">
-                                                        <?= $i + 1 ?>
-                                                    </span>
-                                                    <span class="small fw-semibold"><?= $p['nama'] ?></span>
+                    <!-- ══ 2. BUSINESS ALERTS ═══════════════════════════════ -->
+                    <div class="dash-section">
+                        <div class="dash-section-title">Business Alerts</div>
+                        <div class="card">
+                            <div class="card-body">
+                                <?php if (empty($business_alerts)): ?>
+                                    <div class="no-alerts">
+                                        <i class="bi bi-check-circle fs-5"></i>
+                                        <span>No urgent business alerts.</span>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="row g-2">
+                                        <?php foreach ($business_alerts as $a): ?>
+                                            <div class="col-12 col-md-6">
+                                                <div class="alert-row level-<?= $a['level'] ?>">
+                                                    <i class="bi <?= $a['icon'] ?> text-<?= $a['level'] ?>"></i>
+                                                    <div>
+                                                        <div class="fw-semibold small"><?= $a['title'] ?></div>
+                                                        <small class="text-muted"><?= $a['desc'] ?></small>
+                                                    </div>
                                                 </div>
-                                                <span class="small text-muted"><?= $p['terjual'] ?> sold</span>
                                             </div>
-                                            <div class="progress" style="height:5px">
-                                                <div class="progress-bar progress-bar-anim bg-<?= ['warning', 'primary', 'success', 'info', 'danger'][$i] ?>"
-                                                    style="width:<?= $p['pct'] ?>%"></div>
-                                            </div>
-                                            <div class="text-end mt-1">
-                                                <small class="text-muted"><?= rupiah($p['omset']) ?></small>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ══ ROW 3: Donut Chart + Recent Transactions ═══════════════════ -->
-                    <div class="row g-3 mb-4">
+                    <!-- ══ 3. REVENUE ANALYTICS ═════════════════════════════ -->
+                    <div class="dash-section">
+                        <div class="dash-section-title">Revenue Analytics</div>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="card-title mb-0 fs-6">Revenue Trend</h3>
+                                <ul class="nav period-tab gap-1" id="periodTab">
+                                    <li class="nav-item"><a class="nav-link active" href="#" data-period="daily">Daily</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" data-period="weekly">Weekly</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" data-period="monthly">Monthly</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" data-period="yearly">Yearly</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="mainChart" height="90"></canvas>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- Donut: period distribution -->
-                        <div class="col-12 col-md-5 col-xl-4">
-                            <div class="card chart-card h-100">
-                                <div class="card-header">
-                                    <h6 class="card-title mb-0">
-                                        <i class="bi bi-pie-chart me-2 text-info"></i>Period Distribution
-                                    </h6>
-                                </div>
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                    <canvas id="donutChart" style="max-height:220px;max-width:220px"></canvas>
-                                    <div class="mt-3 w-100">
-                                        <div class="d-flex justify-content-between small mb-1">
-                                            <span><span class="me-2" style="color:#198754">●</span>Today</span>
-                                            <span><?= rupiah($omset_harian_total) ?></span>
-                                        </div>
-                                        <div class="d-flex justify-content-between small mb-1">
-                                            <span><span class="me-2" style="color:#0d6efd">●</span>This Week</span>
-                                            <span><?= rupiah($omset_mingguan_total) ?></span>
-                                        </div>
-                                        <div class="d-flex justify-content-between small">
-                                            <span><span class="me-2"
-                                                    style="color:#dc3545">●</span><?= $bulan_nama_full[$bulan_aktif] ?></span>
-                                            <span><?= rupiah($omset_bulanan_total) ?></span>
-                                        </div>
+                    <!-- ══ 4. TOP SELLING PRODUCTS + 5. RECENT TRANSACTIONS ═ -->
+                    <div class="dash-section">
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-5">
+                                <div class="dash-section-title">Top Selling Products</div>
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <?php foreach ($top_products as $i => $p): ?>
+                                            <div class="product-row">
+                                                <span class="product-rank"><?= $i + 1 ?></span>
+                                                <div class="flex-grow-1">
+                                                    <div class="small fw-semibold"><?= $p['name'] ?></div>
+                                                    <small class="text-muted"><?= $p['sold'] ?> sold</small>
+                                                </div>
+                                                <div class="text-end small fw-semibold"><?= rupiah($p['revenue']) ?></div>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Recent transactions table -->
-                        <div class="col-12 col-md-7 col-xl-8">
-                            <div class="card chart-card h-100">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="card-title mb-0">
-                                        <i class="bi bi-clock-history me-2 text-secondary"></i>Today's Recent
-                                        Transactions
-                                    </h6>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">Invoice</th>
-                                                    <th>Customer</th>
-                                                    <th>Time</th>
-                                                    <th class="text-end">Total</th>
-                                                    <th class="text-center pe-3">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($transaksi_terbaru as $transaction): ?>
+                            <div class="col-12 col-lg-7">
+                                <div class="dash-section-title">Recent Transactions</div>
+                                <div class="card h-100">
+                                    <div class="card-body p-0 d-flex flex-column">
+                                        <div class="table-responsive flex-grow-1">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead>
                                                     <tr>
-                                                        <td class="text-center">
-                                                            <span><?= $transaction['no'] ?></span>
-                                                        </td>
-                                                        <td><?= htmlspecialchars($transaction['customer']) ?></td>
-                                                        <td><small class="text-muted"><?= $transaction['waktu'] ?></small>
-                                                        </td>
-                                                        <td class="text-end fw-semibold">
-                                                            <?= rupiah($transaction['total']) ?></td>
-                                                        <td class="text-center pe-3">
-                                                            <span
-                                                                class="badge <?= $transaction['status'] === 'Paid' ? 'text-bg-success' : 'text-bg-warning' ?>">
-                                                                <?= $transaction['status'] ?>
-                                                            </span>
-                                                        </td>
+                                                        <th>Invoice</th>
+                                                        <th>Customer</th>
+                                                        <th class="text-end">Total</th>
+                                                        <th class="text-center">Status</th>
                                                     </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($recent_transactions as $t): ?>
+                                                        <tr>
+                                                            <td><?= $t['no'] ?></td>
+                                                            <td><?= htmlspecialchars($t['customer']) ?></td>
+                                                            <td class="text-end fw-semibold"><?= rupiah($t['total']) ?></td>
+                                                            <td class="text-center">
+                                                                <?php
+                                                                $badge = match ($t['status']) {
+                                                                    'Paid' => 'text-bg-success',
+                                                                    'Pending' => 'text-bg-warning',
+                                                                    'Overdue' => 'text-bg-danger',
+                                                                    default => 'text-bg-secondary',
+                                                                };
+                                                                ?>
+                                                                <span class="badge <?= $badge ?>"><?= $t['status'] ?></span>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center border-top py-2">
+                                            <a href="../invoice/table.invoice.php" class="btn btn-sm btn-link text-decoration-none">View All Transactions <i class="bi bi-arrow-right ms-1"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -569,77 +342,26 @@ $growth_bulanan = persen_naik(68900000, 63000000);
 
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
-        // ── Data from PHP ────────────────────────────────────────
         const DATA = {
-            harian: {
-                labels: <?= json_encode($jam_labels) ?>,
-                values: <?= json_encode($omset_harian_jam) ?>,
-                color: '#198754'
-            },
-            mingguan: {
-                labels: <?= json_encode($hari_labels) ?>,
-                values: <?= json_encode($omset_per_hari) ?>,
-                color: '#0d6efd'
-            },
-            bulanan: {
-                labels: <?= json_encode($bulan_labels) ?>,
-                values: <?= json_encode($omset_per_tanggal) ?>,
-                color: '#dc3545'
-            }
-        };
-        const DATA_12BULAN = {
-            labels: <?= json_encode($label_12bulan) ?>,
-            values: <?= json_encode($omset_12bulan) ?>
+            daily:   { labels: <?= json_encode($hour_labels) ?>,      values: <?= json_encode($revenue_hourly) ?>,       color: '#2fb380' },
+            weekly:  { labels: <?= json_encode($day_labels) ?>,       values: <?= json_encode($revenue_daily_week) ?>,   color: '#6c8eeb' },
+            monthly: { labels: <?= json_encode($date_labels) ?>,      values: <?= json_encode($revenue_daily_month) ?>,  color: '#d9a441' },
+            yearly:  { labels: <?= json_encode($month_12_labels) ?>,  values: <?= json_encode($revenue_12_months) ?>,    color: '#a078eb' }
         };
 
-        // ── Helper ───────────────────────────────────────────────
         function rupiahShort(v) {
             if (v >= 1e9) return 'Rp ' + (v / 1e9).toFixed(1) + 'B';
             if (v >= 1e6) return 'Rp ' + (v / 1e6).toFixed(1) + 'M';
             return 'Rp ' + (v / 1e3).toFixed(0) + 'K';
         }
-        function rupiahFull(v) {
-            return 'Rp ' + v.toLocaleString('id-ID');
-        }
+        function rupiahFull(v) { return 'Rp ' + v.toLocaleString('id-ID'); }
 
-        const chartDefaults = {
-            responsive: true,
-            plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => rupiahFull(c.parsed.y) } } },
-            scales: { y: { beginAtZero: true, ticks: { callback: rupiahShort } } }
-        };
-
-        // ── Mini chart builder ───────────────────────────────────
-        function buildMini(id, labels, data, color) {
-            const ctx = document.getElementById(id);
-            if (!ctx) return;
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels,
-                    datasets: [{ data, backgroundColor: color + '99', borderRadius: 3 }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => rupiahFull(c.parsed.y) } } },
-                    scales: { x: { display: false }, y: { display: false, beginAtZero: true } }
-                }
-            });
-        }
-
-        buildMini('miniChartHarian', DATA.harian.labels, DATA.harian.values, '#198754');
-        buildMini('miniChartMingguan', DATA.mingguan.labels, DATA.mingguan.values, '#0d6efd');
-        buildMini('miniChartBulanan', DATA.bulanan.labels, DATA.bulanan.values, '#dc3545');
-
-        // ── Main chart ───────────────────────────────────────────
         let mainChart = null;
         function buildMainChart(period) {
             const ctx = document.getElementById('mainChart');
             if (!ctx) return;
             if (mainChart) mainChart.destroy();
-            const d = period === 'bulanan'
-                ? { labels: DATA_12BULAN.labels, values: DATA_12BULAN.values, color: '#dc3545' }
-                : DATA[period];
+            const d = DATA[period];
             mainChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -648,20 +370,26 @@ $growth_bulanan = persen_naik(68900000, 63000000);
                         label: 'Revenue',
                         data: d.values,
                         borderColor: d.color,
-                        backgroundColor: d.color + '22',
+                        backgroundColor: d.color + '1f',
                         borderWidth: 2.5,
                         pointBackgroundColor: d.color,
-                        pointRadius: 4,
+                        pointRadius: 3,
                         fill: true,
                         tension: 0.4
                     }]
                 },
-                options: { ...chartDefaults }
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => rupiahFull(c.parsed.y) } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: rupiahShort }, grid: { color: 'rgba(255,255,255,.06)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
             });
         }
-        buildMainChart('harian');
+        buildMainChart('daily');
 
-        // Period tab switcher
         document.querySelectorAll('#periodTab .nav-link').forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
@@ -669,29 +397,6 @@ $growth_bulanan = persen_naik(68900000, 63000000);
                 link.classList.add('active');
                 buildMainChart(link.dataset.period);
             });
-        });
-
-        // ── Donut chart ──────────────────────────────────────────
-        new Chart(document.getElementById('donutChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Today', 'This Week', '<?= $bulan_nama_full[$bulan_aktif] ?>'],
-                datasets: [{
-                    data: [<?= $omset_harian_total ?>, <?= $omset_mingguan_total ?>, <?= $omset_bulanan_total ?>],
-                    backgroundColor: ['#198754', '#0d6efd', '#dc3545'],
-                    borderWidth: 2,
-                    hoverOffset: 6
-                }]
-            },
-            options: {
-                cutout: '72%',
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: c => rupiahFull(c.parsed) } }
-                }
-            }
         });
     </script>
 </body>

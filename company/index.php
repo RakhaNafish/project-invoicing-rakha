@@ -304,13 +304,10 @@ $comp = $company[0];
             </div>
 
         </div>
-
         <?php include "../itu diapain/footer.php"; ?>
-
     </div>
 
     <script src="../dist/js/adminlte.min.js"></script>
 
 </body>
-
 </html>

@@ -125,9 +125,9 @@ function rupiah(int $n): string
             <div class="app-content p-3">
 
                 <!-- Page Header -->
-                <div class="content-header px-3 py-3">
+                <div class="content-header pe-3 py-3">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
+                        <div class="row">
                             <div class="col-sm-6">
                                 <h3><?= $data_edit ? 'Edit Payment' : 'Add Payment' ?></h3>
                             </div>
@@ -144,132 +144,135 @@ function rupiah(int $n): string
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <?= $data_edit ? 'Form Edit Payment' : 'Form Payment Invoice' ?>
-                        </h5>
-                    </div>
-                    <div class="card-body">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <?= $data_edit ? 'Form Edit Payment' : 'Form Payment Invoice' ?>
+                            </h3>
+                        </div>
+                        <div class="card-body">
 
-                        <form id="formPembayaran" method="POST" action="#">
+                            <form id="formPembayaran" method="POST" action="#">
 
-                            <?php if ($data_edit): ?>
-                                <input type="hidden" name="id" value="<?= $data_edit['id'] ?>">
-                            <?php endif; ?>
-                            <input type="hidden" name="from" value="<?= htmlspecialchars($from) ?>">
-
-                            <!-- Pilih Invoice -->
-                            <div class="mb-3">
-                                <label class="form-label">Choose Invoice <span class="text-danger">*</span></label>
-                                <select name="no_invoice" id="selectInvoice" class="form-select" required <?= $data_edit ? 'disabled' : '' ?>>
-                                    <option value="">-- Invoice --</option>
-                                    <?php foreach ($daftar_invoice as $inv): ?>
-                                        <option value="<?= $inv['no_invoice'] ?>"
-                                            data-customer="<?= htmlspecialchars($inv['customer']) ?>"
-                                            data-total="<?= $inv['total_invoice'] ?>"
-                                            data-dibayar="<?= $inv['sudah_dibayar'] ?>" data-sisa="<?= $inv['sisa'] ?>"
-                                            <?= $initial && $initial['no_invoice'] === $inv['no_invoice'] ? 'selected' : '' ?>
-                                            <?= $inv['sisa'] <= 0 ? 'disabled' : '' ?>>
-                                            <?= $inv['no_invoice'] ?> — <?= $inv['customer'] ?>
-                                            <?= $inv['sisa'] <= 0 ? '(Lunas)' : '' ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                    <?php if ($data_edit): ?>
-                                        <option value="<?= $data_edit['no_invoice'] ?>" selected
-                                            data-customer="<?= htmlspecialchars($data_edit['customer']) ?>"
-                                            data-total="<?= $data_edit['total_invoice'] ?>" data-dibayar="0"
-                                            data-sisa="<?= $data_edit['sisa_sebelum'] ?>">
-                                            <?= $data_edit['no_invoice'] ?> — <?= $data_edit['customer'] ?>
-                                        </option>
-                                    <?php endif; ?>
-                                </select>
                                 <?php if ($data_edit): ?>
-                                    <small class="text-muted">The invoice cannot be modified in edit mode.</small>
+                                    <input type="hidden" name="id" value="<?= $data_edit['id'] ?>">
                                 <?php endif; ?>
-                            </div>
+                                <input type="hidden" name="from" value="<?= htmlspecialchars($from) ?>">
 
-                            <!-- Info Invoice -->
-                            <div class="invoice-info-box mb-4" id="invoiceInfoBox"
-                                style="<?= $initial ? '' : 'display:none' ?>">
-                                <div class="info-row">
-                                    <span class="label">Customer</span>
-                                    <span class="fw-semibold"
-                                        id="infoCustomer"><?= $initial ? htmlspecialchars($initial['customer']) : '-' ?></span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">Total Invoice</span>
-                                    <span
-                                        id="infoTotal"><?= $initial ? rupiah($initial['total_invoice']) : '-' ?></span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="label">Already paid</span>
-                                    <span id="infoDibayar"><?= $initial ? rupiah($initial['dibayar']) : '-' ?></span>
-                                </div>
-                                <hr class="my-2">
-                                <div class="info-row">
-                                    <span class="label">Rest of the bill</span>
-                                    <span class="sisa-highlight"
-                                        id="infoSisa"><?= $initial ? rupiah($initial['sisa']) : '-' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row g-3">
-                                <!-- Tanggal -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Date Payment <span class="text-danger">*</span></label>
-                                    <input type="date" name="tanggal" class="form-control" required
-                                        value="<?= $data_edit ? $data_edit['tanggal'] : date('Y-m-d') ?>">
-                                </div>
-
-                                <!-- Metode -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Payment Methods <span class="text-danger">*</span></label>
-                                    <select name="metode" class="form-select" required>
-                                        <?php
-                                        $metode_list = ['Cash', 'Bank Transfer', 'QRIS', 'Debit Card', 'Credit Card'];
-                                        foreach ($metode_list as $m):
-                                            ?>
-                                            <option value="<?= $m ?>" <?= ($data_edit && $data_edit['metode'] === $m) ? 'selected' : '' ?>><?= $m ?></option>
+                                <!-- Pilih Invoice -->
+                                <div class="mb-3">
+                                    <label class="form-label">Choose Invoice <span class="text-danger">*</span></label>
+                                    <select name="no_invoice" id="selectInvoice" class="form-select" required <?= $data_edit ? 'disabled' : '' ?>>
+                                        <option value="">-- Invoice --</option>
+                                        <?php foreach ($daftar_invoice as $inv): ?>
+                                            <option value="<?= $inv['no_invoice'] ?>"
+                                                data-customer="<?= htmlspecialchars($inv['customer']) ?>"
+                                                data-total="<?= $inv['total_invoice'] ?>"
+                                                data-dibayar="<?= $inv['sudah_dibayar'] ?>" data-sisa="<?= $inv['sisa'] ?>"
+                                                <?= $initial && $initial['no_invoice'] === $inv['no_invoice'] ? 'selected' : '' ?>
+                                                <?= $inv['sisa'] <= 0 ? 'disabled' : '' ?>>
+                                                <?= $inv['no_invoice'] ?> — <?= $inv['customer'] ?>
+                                                <?= $inv['sisa'] <= 0 ? '(Lunas)' : '' ?>
+                                            </option>
                                         <?php endforeach; ?>
+                                        <?php if ($data_edit): ?>
+                                            <option value="<?= $data_edit['no_invoice'] ?>" selected
+                                                data-customer="<?= htmlspecialchars($data_edit['customer']) ?>"
+                                                data-total="<?= $data_edit['total_invoice'] ?>" data-dibayar="0"
+                                                data-sisa="<?= $data_edit['sisa_sebelum'] ?>">
+                                                <?= $data_edit['no_invoice'] ?> — <?= $data_edit['customer'] ?>
+                                            </option>
+                                        <?php endif; ?>
                                     </select>
+                                    <?php if ($data_edit): ?>
+                                        <small class="text-muted">The invoice cannot be modified in edit mode.</small>
+                                    <?php endif; ?>
                                 </div>
 
-                                <!-- Nominal -->
-                                <div class="col">
-                                    <label class="form-label">Payment Amount <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" name="nominal" id="inputNominal" class="form-control"
-                                            min="1" required placeholder="0"
-                                            value="<?= $data_edit ? $data_edit['nominal'] : '' ?>">
+                                <!-- Info Invoice -->
+                                <div class="invoice-info-box mb-4" id="invoiceInfoBox"
+                                    style="<?= $initial ? '' : 'display:none' ?>">
+                                    <div class="info-row">
+                                        <span class="label">Customer</span>
+                                        <span class="fw-semibold"
+                                            id="infoCustomer"><?= $initial ? htmlspecialchars($initial['customer']) : '-' ?></span>
                                     </div>
-                                    <small class="text-muted">Up to a maximum of the outstanding balance</small>
+                                    <div class="info-row">
+                                        <span class="label">Total Invoice</span>
+                                        <span
+                                            id="infoTotal"><?= $initial ? rupiah($initial['total_invoice']) : '-' ?></span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="label">Already paid</span>
+                                        <span id="infoDibayar"><?= $initial ? rupiah($initial['dibayar']) : '-' ?></span>
+                                    </div>
+                                    <hr class="my-2">
+                                    <div class="info-row">
+                                        <span class="label">Rest of the bill</span>
+                                        <span class="sisa-highlight"
+                                            id="infoSisa"><?= $initial ? rupiah($initial['sisa']) : '-' ?></span>
+                                    </div>
                                 </div>
 
-                                <!-- Keterangan -->
-                                <div class="col-12">
-                                    <label class="form-label">Information</label>
-                                    <textarea name="keterangan" class="form-control" rows="3"
-                                        placeholder="Additional notes (opsional)"><?= $data_edit ? htmlspecialchars($data_edit['keterangan']) : '' ?></textarea>
+                                <div class="row g-3">
+                                    <!-- Tanggal -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Date Payment <span class="text-danger">*</span></label>
+                                        <input type="date" name="tanggal" class="form-control" required
+                                            value="<?= $data_edit ? $data_edit['tanggal'] : date('Y-m-d') ?>">
+                                    </div>
+
+                                    <!-- Metode -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Payment Methods <span class="text-danger">*</span></label>
+                                        <select name="metode" class="form-select" required>
+                                            <?php
+                                            $metode_list = ['Cash', 'Bank Transfer', 'QRIS', 'Debit Card', 'Credit Card'];
+                                            foreach ($metode_list as $m):
+                                                ?>
+                                                <option value="<?= $m ?>" <?= ($data_edit && $data_edit['metode'] === $m) ? 'selected' : '' ?>><?= $m ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <!-- Nominal -->
+                                    <div class="col">
+                                        <label class="form-label">Payment Amount <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" name="nominal" id="inputNominal" class="form-control"
+                                                min="1" required placeholder="0"
+                                                value="<?= $data_edit ? $data_edit['nominal'] : '' ?>">
+                                        </div>
+                                        <small class="text-muted">Up to a maximum of the outstanding balance</small>
+                                    </div>
+
+                                    <!-- Keterangan -->
+                                    <div class="col-12">
+                                        <label class="form-label">Information</label>
+                                        <textarea name="keterangan" class="form-control" rows="3"
+                                            placeholder="Additional notes (opsional)"><?= $data_edit ? htmlspecialchars($data_edit['keterangan']) : '' ?></textarea>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <hr class="my-4">
+                                <hr class="my-4">
 
-                            <div class="d-flex justify-content-start gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <?= $data_edit ? 'Save' : 'Save' ?>
-                                </button>
-                                <a href="<?= htmlspecialchars($backUrl) ?>" class="btn btn-secondary">
-                                    Cancel
-                                </a>
-                            </div>
+                                <div class="d-flex justify-content-start gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <?= $data_edit ? 'Save' : 'Save' ?>
+                                    </button>
+                                    <a href="<?= htmlspecialchars($backUrl) ?>" class="btn btn-secondary">
+                                        Cancel
+                                    </a>
+                                </div>
 
-                        </form>
+                            </form>
 
+                        </div>
                     </div>
                 </div>
+            
             </div>
         </div>
     </div>

@@ -62,25 +62,23 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
     <title>Data Invoice</title>
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"> -->
 
 </head>
 
 <body class="layout-fixed fixed-header sidebar-expand-lg sidebar-collapse">
     <div class="app-wrapper">
 
-        <?php include "../itu diapain/header.php"; ?>
-        <?php 
+        <?php include "../component/header.php"; ?>
+        <?php
         $activePage = 'revenue';
-        include "../itu diapain/sidebar.php"; 
-        ?>
+        include "../component/sidebar.php"; ?>
 
         <!-- Main Content -->
-        <div class="content-wrapper">
+        <div class="app-main bg-body-tertiary">
             <div class="app-content p-3">
 
-                <div class="content-header px-3 pt-3">
+                <div class="content-header pe-3 py-3">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
@@ -89,11 +87,9 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">
                                     <li class="breadcrumb-item">
-                                        <a href="../dashboard/dashboard.php">Dashboard</a>
+                                        <a href="../dashboard/dashboard.php" class="text-decoration-none">Dashboard</a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        Revenue
-                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">Revenue</li>
                                 </ol>
                             </div>
 
@@ -101,200 +97,198 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="container-fluid">
+                    <div class="card">
 
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card-header d-flex justify-content-between align-items-center">
 
-                        <h5 class="mb-0">Revenue Table</h5>
+                            <h6 class="card-title mb-0">Revenue Table</h6>
 
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-primary active period-btn" data-period="daily">
-                                Daily
-                            </button>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-primary active period-btn" data-period="daily">
+                                    Daily
+                                </button>
 
-                            <button class="btn btn-outline-primary period-btn" data-period="weekly">
-                                Weekly
-                            </button>
+                                <button class="btn btn-outline-primary period-btn" data-period="weekly">
+                                    Weekly
+                                </button>
 
-                            <button class="btn btn-outline-primary period-btn" data-period="monthly">
-                                Monthly
-                            </button>
-                        </div>
-
-                    </div>
-
-                    <div class="card-body">
-                        <div id="table-daily">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover align-middle" id="tabelHarian">
-                                    <thead>
-                                        <tr>
-                                            <th class="sortable" data-col="0">Day</th>
-                                            <th class="sortable text-center" data-col="1">Total Invoice </th>
-                                            <th class="sortable text-center" data-col="2">Total Item</th>
-                                            <th class="sortable text-end" data-col="3">Total Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($invoices_harian as $inv): ?>
-                                            <tr>
-                                                <td><?= htmlspecialchars($inv['daily']) ?></td>
-                                                <td class="text-center"><?= $inv['total_invoice'] ?></td>
-                                                <td class="text-center"><?= $inv['item_amount'] ?></td>
-                                                <td class="text-end fw-semibold"><?= rupiah($inv['total']) ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                <button class="btn btn-outline-primary period-btn" data-period="monthly">
+                                    Monthly
+                                </button>
                             </div>
+
                         </div>
 
-                        <div id="table-weekly" class="d-none">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover align-middle" id="tabelMingguan">
-                                    <thead>
-                                        <tr>
-                                            <th class="sortable" data-col="0">Week</th>
-                                            <th class="sortable text-center" data-col="1">Total Invoices</th>
-                                            <th class="sortable text-center" data-col="2">Total Items</th>
-                                            <th class="sortable text-end" data-col="3">Revenue</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($data_mingguan as $row): ?>
+                        <div class="card-body">
+                            <div id="table-daily">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle" id="tabelHarian">
+                                        <thead>
                                             <tr>
-                                                <td><?= $row['mingguan'] ?></td>
-                                                <td class="text-center"><?= $row['jumlah_invoice'] ?></td>
-                                                <td class="text-center"><?= $row['jumlah_item'] ?></td>
-                                                <td class="text-end fw-semibold"><?= rupiah($row['omset']) ?></td>
+                                                <th class="sortable" data-col="0">Day</th>
+                                                <th class="sortable text-center" data-col="1">Total Invoice </th>
+                                                <th class="sortable text-center" data-col="2">Total Item</th>
+                                                <th class="sortable text-end" data-col="3">Total Amount</th>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($invoices_harian as $inv): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($inv['daily']) ?></td>
+                                                    <td class="text-center"><?= $inv['total_invoice'] ?></td>
+                                                    <td class="text-center"><?= $inv['item_amount'] ?></td>
+                                                    <td class="text-end fw-semibold"><?= rupiah($inv['total']) ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
 
-                        <div id="table-monthly" class="d-none">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover align-middle" id="tabelBulanan">
-                                    <thead>
-                                        <tr>
-                                            <th class="sortable" data-col="0">Month</th>
-                                            <th class="sortable text-center" data-col="1">Total Invoices</th>
-                                            <th class="sortable text-center" data-col="2">Total Items</th>
-                                            <th class="sortable text-end" data-col="3">Revenue</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($data_bulanan as $row): ?>
+                            <div id="table-weekly" class="d-none">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle" id="tabelMingguan">
+                                        <thead>
                                             <tr>
-                                                <td><?= htmlspecialchars($row['tanggal_label']) ?></td>
-                                                <td class="text-center"><?= $row['jumlah_invoice'] ?></td>
-                                                <td class="text-center"><?= $row['jumlah_item'] ?></td>
-                                                <td class="text-end fw-semibold"><?= rupiah($row['omset']) ?></td>
+                                                <th class="sortable" data-col="0">Week</th>
+                                                <th class="sortable text-center" data-col="1">Total Invoices</th>
+                                                <th class="sortable text-center" data-col="2">Total Items</th>
+                                                <th class="sortable text-end" data-col="3">Revenue</th>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($data_mingguan as $row): ?>
+                                                <tr>
+                                                    <td><?= $row['mingguan'] ?></td>
+                                                    <td class="text-center"><?= $row['jumlah_invoice'] ?></td>
+                                                    <td class="text-center"><?= $row['jumlah_item'] ?></td>
+                                                    <td class="text-end fw-semibold"><?= rupiah($row['omset']) ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mt-3 d-flex justify-content-end">
-                            <ul class="pagination pagination-sm m-0">
 
-                                <!-- Previous -->
-                                <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page - 1 ?>">
-                                        Previous
-                                    </a>
-                                </li>
+                            <div id="table-monthly" class="d-none">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle" id="tabelBulanan">
+                                        <thead>
+                                            <tr>
+                                                <th class="sortable" data-col="0">Month</th>
+                                                <th class="sortable text-center" data-col="1">Total Invoices</th>
+                                                <th class="sortable text-center" data-col="2">Total Items</th>
+                                                <th class="sortable text-end" data-col="3">Revenue</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($data_bulanan as $row): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($row['tanggal_label']) ?></td>
+                                                    <td class="text-center"><?= $row['jumlah_invoice'] ?></td>
+                                                    <td class="text-center"><?= $row['jumlah_item'] ?></td>
+                                                    <td class="text-end fw-semibold"><?= rupiah($row['omset']) ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-end">
+                                <ul class="pagination pagination-sm m-0">
 
-                                <!-- Page 1 -->
-                                <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=1">1</a>
-                                </li>
-
-                                <!-- Titik awal -->
-                                <?php if ($page > 3): ?>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
-                                    </li>
-                                <?php endif; ?>
-
-                                <!-- Page sekitar current -->
-                                <?php for ($i = max(2, $page - 1); $i <= min($totalPage - 1, $page + 1); $i++): ?>
-                                    <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                        <a class="page-link" href="?page=<?= $i ?>">
-                                            <?= $i ?>
+                                    <!-- Previous -->
+                                    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $page - 1 ?>">
+                                            Previous
                                         </a>
                                     </li>
-                                <?php endfor; ?>
 
-                                <!-- Titik akhir -->
-                                <?php if ($page < $totalPage - 2): ?>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
+                                    <!-- Page 1 -->
+                                    <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
+                                        <a class="page-link" href="?page=1">1</a>
                                     </li>
-                                <?php endif; ?>
 
-                                <!-- Last Page -->
-                                <?php if ($totalPage > 1): ?>
-                                    <li class="page-item <?= ($page == $totalPage) ? 'active' : '' ?>">
-                                        <a class="page-link" href="?page=<?= $totalPage ?>">
-                                            <?= $totalPage ?>
+                                    <!-- Titik awal -->
+                                    <?php if ($page > 3): ?>
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <!-- Page sekitar current -->
+                                    <?php for ($i = max(2, $page - 1); $i <= min($totalPage - 1, $page + 1); $i++): ?>
+                                        <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?page=<?= $i ?>">
+                                                <?= $i ?>
+                                            </a>
+                                        </li>
+                                    <?php endfor; ?>
+
+                                    <!-- Titik akhir -->
+                                    <?php if ($page < $totalPage - 2): ?>
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <!-- Last Page -->
+                                    <?php if ($totalPage > 1): ?>
+                                        <li class="page-item <?= ($page == $totalPage) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?page=<?= $totalPage ?>">
+                                                <?= $totalPage ?>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <!-- Next -->
+                                    <li class="page-item <?= ($page >= $totalPage) ? 'disabled' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $page + 1 ?>">
+                                            Next
                                         </a>
                                     </li>
-                                <?php endif; ?>
-
-                                <!-- Next -->
-                                <li class="page-item <?= ($page >= $totalPage) ? 'disabled' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page + 1 ?>">
-                                        Next
-                                    </a>
-                                </li>
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
+
                     </div>
 
-                </div>
-
-                <div class="card mt-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="card-title mb-0">
-                            <i class="text-warning"></i>Top 5 Best-Selling Products
-                        </h6>
-                    </div>
-                    <div class="card-body py-2">
-                        <?php foreach ($top_produk as $i => $p): ?>
-                            <div class="top-product-row">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="small fw-semibold"><?= $p['nama'] ?></span>
+                    <div class="card mt-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="card-title mb-0">Top 5 Best-Selling Products</h6>
+                        </div>
+                        <div class="card-body py-2">
+                            <?php foreach ($top_produk as $i => $p): ?>
+                                <div class="top-product-row">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="small fw-semibold"><?= $p['nama'] ?></span>
+                                        </div>
+                                        <span class="small text-muted"><?= $p['terjual'] ?> sold</span>
                                     </div>
-                                    <span class="small text-muted"><?= $p['terjual'] ?> sold</span>
+                                    <div class="progress" style="height:5px">
+                                        <div class="progress-bar progress-bar-anim bg-<?= ['warning', 'primary', 'success', 'info', 'danger'][$i] ?>"
+                                            style="width:<?= $p['pct'] ?>%"></div>
+                                    </div>
+                                    <div class="text-end mt-1">
+                                        <small class="text-muted"><?= rupiah($p['omset']) ?></small>
+                                    </div>
                                 </div>
-                                <div class="progress" style="height:5px">
-                                    <div class="progress-bar progress-bar-anim bg-<?= ['warning', 'primary', 'success', 'info', 'danger'][$i] ?>"
-                                        style="width:<?= $p['pct'] ?>%"></div>
-                                </div>
-                                <div class="text-end mt-1">
-                                    <small class="text-muted"><?= rupiah($p['omset']) ?></small>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
 
         </div>
-        <?php include "../itu diapain/footer.php"; ?>
+        <?php include "../component/footer.php"; ?>
 
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../dist/js/adminlte.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
     <script>
         const buttons = document.querySelectorAll(".period-btn");
 

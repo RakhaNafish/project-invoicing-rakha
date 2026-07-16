@@ -1,16 +1,13 @@
-<?php
-$from = isset($_GET['from']) && $_GET['from'] === 'table' ? 'table' : 'invoice';
-$backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
-?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Invoice</title>
+    <title>Add Item</title>
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
 </head>
 
 <body class="hold-transition layout-fixed fixed-header sidebar-expand-lg sidebar-collapse">
@@ -25,7 +22,7 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h4>Edit Invoice</h4>
+                                <h3>Add Item</h3>
                             </div>
 
                             <div class="col-sm-6">
@@ -34,10 +31,10 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                                         <a href="../dashboard/dashboard.php" class="text-decoration-none">Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="<?= $backUrl ?>" class="text-decoration-none">Invoice</a>
+                                        <a href="index.php" class="text-decoration-none">Item</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        <a>Edit Invoice</a>
+                                        <a>Add Item</a>
                                     </li>
                                 </ol>
                             </div>
@@ -46,51 +43,44 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                 </div>
 
                 <div class="container-fluid">
+
                     <section>
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Form Edit Invoice</h3>
+                                <h3 class="card-title">Form Add Item</h3>
                             </div>
 
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                        <label>Invoice No</label>
-                                        <input type="text" class="form-control" placeholder="Insert Invoice No">
+                                        <label>Ref No</label>
+                                        <input type="text" class="form-control" placeholder="Example : ITM001">
                                     </div>
-
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="Insert Customer Name">
+                                        <input type="text" class="form-control" placeholder="Item Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price</label>
+                                        <input type="number" class="form-control" placeholder="Price">
                                     </div>
 
-                                    <div class="form-group">
-                                        <label>Issue_date</label>
-                                        <input type="date" class="form-control" placeholder="Insert Issue_date">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Due_Date</label>
-                                        <input type="date" class="form-control" placeholder="Insert Due_Date">
-                                    </div>
-                                    <!-- <div class="form-group">
-                                        <label>Status</label>
-                                        <select class="form-control">
-                                            <option>Paid</option>
-                                            <option>Unpaid</option>
-                                            <option>Pending</option>
-                                        </select>
-                                    </div> -->
+
                                 </form>
                             </div>
                             <div class="card-footer">
-                                <a href="<?= $backUrl ?>" class="btn btn-warning">Update</a>
-                                <a href="<?= $backUrl ?>" class="btn btn-secondary">Cancel</a>
+                                <a href="index.php" class="btn btn-primary float-right">Save</a>
+                                <a href="index.php" class="btn btn-secondary">Cancel</a>
                             </div>
+
                         </div>
+
                 </div>
+
                 </section>
             </div>
         </div>
+
         <?php include "../component/footer.php"; ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -35,6 +35,26 @@
                     <img src="../customer/izinmin.jfif" class="user-image rounded-circle shadow" alt="User Image">
                     <span class="d-none d-md-inline">Azura Mishimoto</span>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <!--begin::User Image-->
+                <li class="user-header text-bg-primary">
+                  <img
+                    src="../customer/izinmin.jfif"
+                    class="rounded-circle shadow"
+                    alt="User Image"
+                  />
+                  <p>
+                    Azura Mishimoto
+                    <small>Admin</small>
+                  </p>
+                </li>
+                <!--end::User Image-->
+                <!--begin::Menu Footer-->
+                <li class="user-footer">
+                  <a href="../login/login.php" class="btn btn-outline-danger d-flex justify-content-center">Sign out</a>
+                </li>
+                <!--end::Menu Footer-->
+              </ul>
             </li>
             <!--end::User Menu Dropdown-->
 

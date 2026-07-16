@@ -1,7 +1,8 @@
-<aside class="app-sidebar bg-body-tertiary" data-bs-theme="dark">
+<aside class="app-sidebar bg-dark" data-bs-theme="dark">
 
     <div class="sidebar-brand">
         <a href="#" class="brand-link">
+            <i class="nav-icon bi bi-receipt"></i>
             <span class="brand-text">Invoicing App</span>
         </a>
     </div>
@@ -14,22 +15,15 @@
                 <li class="nav-item">
                     <a href="../dashboard/dashboard.php"
                         class="nav-link <?= ($activePage ?? '') == 'dashboard' ? 'active' : '' ?>">
-                        <i class="nav-icon bi bi-house"></i>
+                        <i class="nav-icon bi bi-grid-1x2"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
+
                 <!-- Master Data -->
                 <li class="nav-header fw-bold text-uppercase">
                     Master Data
-                </li>
-
-                <li class="nav-item">
-                    <a href="../company/index.php"
-                        class="nav-link <?= ($activePage ?? '') == 'company' ? 'active' : '' ?>">
-                        <i class="nav-icon bi bi-buildings"></i>
-                        <p>Company</p>
-                    </a>
                 </li>
 
                 <li class="nav-item">
@@ -47,9 +41,16 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="../pic/index.php" class="nav-link <?= ($activePage ?? '') == 'pic' ? 'active' : '' ?>">
+                        <i class="nav-icon bi bi-people"></i>
+                        <p>PIC</p>
+                    </a>
+                </li>
+
                 <!-- Transaction -->
                 <li class="nav-header fw-bold text-uppercase">
-                    Transaction
+                    Transactions
                 </li>
 
                 <li class="nav-item">
@@ -70,7 +71,7 @@
 
                 <!-- Report -->
                 <li class="nav-header fw-bold text-uppercase">
-                    Report
+                    Reports
                 </li>
 
                 <li class="nav-item">
@@ -89,6 +90,23 @@
                     </a>
                 </li>
 
+                <!-- Settings -->
+                <li class="nav-header fw-bold text-uppercase">
+                    Settings
+                </li>
+                <li class="nav-item">
+                    <a href="../company/index.php"
+                        class="nav-link <?= ($activePage ?? '') == 'company' ? 'active' : '' ?>">
+                        <i class="nav-icon bi bi-buildings"></i>
+                        <p>Company</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../user/index.php" class="nav-link <?= ($activePage ?? '') == 'user' ? 'active' : '' ?>">
+                        <i class="nav-icon bi bi-person"></i>
+                        <p>Manage User</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

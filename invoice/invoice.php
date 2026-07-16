@@ -102,8 +102,8 @@ foreach ($invoiceItems as $item) {
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary sidebar-collapse reduce-motion app-loaded">
   <div class="app-wrapper">
 
-    <?php include "../itu diapain/header.php"; ?>
-    <?php include "../itu diapain/sidebar.php"; ?>
+    <?php include "../component/header.php"; ?>
+    <?php include "../component/sidebar.php"; ?>
 
     <main class="app-main" id="main" tabindex="-1">
       <div class="app-content-header">
@@ -115,8 +115,8 @@ foreach ($invoiceItems as $item) {
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="../dashboard/dashboard.php">Dashboard</a></li>
-                <li class="breadcrumb-item active"><a href="table.invoice.php">Invoice</a></li>
-                <li class="breadcrumb-item active" aria-current="page">See Invoice</li>
+                <li class="breadcrumb-item active"><a href="table.invoice.php">Data Invoice</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Invoice</li>
               </ol>
             </div>
           </div>
@@ -134,14 +134,13 @@ foreach ($invoiceItems as $item) {
             <button class="btn btn-outline-secondary" onclick="buatPDF()">
               <i class="bi bi-download me-1"></i> PDF
             </button>
-            </a>
-            <a href="edit.php" class="btn btn-warning">
-              <i class="bi bi-pencil-square"></i> Edit Invoice
+            <a href="edit.php?from=invoice" class="btn btn-warning">
+              <i class="bi bi-pencil-square"></i> Edit
             </a>
             <div class="dropdown">
               <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i>
-                Other
+                Save
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="#"><i class="bi bi-send me-1"></i> Send Invoice</a></li>
@@ -161,11 +160,10 @@ foreach ($invoiceItems as $item) {
               <!-- Header -->
               <div class="row mb-4">
                 <div class="col-sm-6">
-                  <h2 class="h4 mb-0 text-primary fw-semibold">AdminLTE, Inc.</h2>
+                  <h2 class="h4 mb-0 text-primary fw-semibold">Araya Store</h2>
                   <p class="text-secondary mb-0 small">
-                    795 Folsom Ave, Suite 600<br>
-                    San Francisco, CA 94107<br>
-                    vwvwvwvw@email.com
+                    Jl. Diponegoro, Surabaya<br>
+                    Azura@gmail.com
                   </p>
                 </div>
                 <div class="col-sm-6 text-sm-end">
@@ -178,19 +176,16 @@ foreach ($invoiceItems as $item) {
               <!-- Billing details -->
               <div class="row mb-4">
                 <div class="col-sm-6">
-                  <p class="text-secondary small mb-1">Billed to</p>
-                  <p class="mb-0 fw-semibold">Lobotomy Corporation</p>
-                  <p class="text-secondary small mb-0">
-                    Attn: Azura Mishimoto<br>
-                    1234 Adalah Pokoknya<br>
-                    Surabaya, Jawa Timur
-                  </p>
+                  <p class="text-secondary small mb-0">Billed to</p>
+                  <p class="mb-3 fw-semibold">Ahmad Fauzi</p>
+                  <p class="text-secondary small mb-0">Person in Charge</p>
+                  <p class="mb-0">Azura Mishimoto</p>
                 </div>
                 <div class="col-sm-6 text-sm-end">
                   <p class="text-secondary small mb-1">Issue date</p>
                   <p class="mb-2">May 18, 2026</p>
                   <p class="text-secondary small mb-1">Due date</p>
-                  <p class="mb-0">June 1, 2026</p>
+                  <p class="mb-2">June 1, 2026</p>
                 </div>
               </div>
 
@@ -221,10 +216,10 @@ foreach ($invoiceItems as $item) {
                         <td class="text-end">Rp <?= number_format($item['price'], 0, ',', '.') ?></td>
                         <td class="text-end">Rp <?= number_format($item['qty'] * $item['price'], 0, ',', '.') ?></td>
                         <td class="text-center d-print-none">
-                          <button class="btn btn-warning btn-sm me-1" onclick="openEditModal(<?= $i ?>)" title="Edit">
+                          <button class="btn btn-outline-warning btn-sm me-1" onclick="openEditModal(<?= $i ?>)" title="Edit">
                             <i class="bi bi-pencil-square"></i>
                           </button>
-                          <button class="btn btn-danger btn-sm" onclick="openDeleteModal(<?= $i ?>)" title="Hapus">
+                          <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(<?= $i ?>)" title="Hapus">
                             <i class="bi bi-trash3"></i>
                           </button>
                         </td>
@@ -257,7 +252,7 @@ foreach ($invoiceItems as $item) {
               <hr class="my-4">
               <p class="text-secondary small mb-0">
                 Thanks for your business. If you have any questions
-                about this invoice, please contact <a href="mailto:rakhanafishrs@email.com">rakhanafishrs@email.com</a>.
+                about this invoice, please contact <a href="mailto:rakhanafishrs@email.com">Azura@gmail.com</a>.
               </p>
 
             </div>
@@ -266,12 +261,8 @@ foreach ($invoiceItems as $item) {
       </div>
     </main>
 
-    <footer class="app-footer">
-      <div class="float-end d-none d-sm-inline">Anything you want</div>
-      <strong>Copyright © 2014-2026&nbsp;<a href="https://adminlte.io"
-          class="text-decoration-none">AdminLTE.io</a>.</strong>
-      All rights reserved.
-    </footer>
+    <?php include "../component/footer.php"; ?>
+
     <div class="sidebar-overlay"></div>
   </div>
 
@@ -288,16 +279,16 @@ foreach ($invoiceItems as $item) {
         <div class="modal-body">
 
           <div class="mb-3">
-            <label for="addSelect" class="form-label fw-semibold">Nama Item <span class="text-danger">*</span></label>
+            <label for="addSelect" class="form-label fw-semibold">Item Name<span class="text-danger">*</span></label>
             <select class="form-select" id="addSelect">
-              <option value=""> Pilih item </option>
+              <option value="">-- Choose item --</option>
               <?php foreach ($katalog as $k): ?>
                 <option value="<?= $k['id'] ?>" data-price="<?= $k['price'] ?>">
                   <?= htmlspecialchars($k['name']) ?>
                 </option>
               <?php endforeach; ?>
             </select>
-            <div class="invalid-feedback" id="addSelectError">Pilih item terlebih dahulu.</div>
+            <div class="invalid-feedback" id="addSelectError">Choose item First.</div>
           </div>
 
           <div class="mb-3">
@@ -313,22 +304,22 @@ foreach ($invoiceItems as $item) {
               <input type="text" class="form-control bg-light text-secondary" id="addPriceDisplay" readonly
                 placeholder="—">
             </div>
-            <small class="text-secondary">Otomatis dari katalog.</small>
+            <small class="text-secondary">Automatic from catalog.</small>
           </div>
 
           <div class="p-3 bg-light rounded">
             <div class="d-flex justify-content-between">
-              <span class="text-secondary">Amount:</span>
-              <span class="fw-semibold text-secondary" id="addPreviewAmount">Rp 0</span>
+              <span class="text-black">Amount:</span>
+              <span class="fw-semibold text-black" id="addPreviewAmount">Rp 0</span>
             </div>
           </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
           <button type="button" class="btn btn-primary" onclick="saveAddItem()">
-            <i class="bi bi-plus-lg me-1"></i>Tambah
+            <i class="bi bi-plus-lg me-1"></i>Add
           </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
@@ -348,16 +339,16 @@ foreach ($invoiceItems as $item) {
           <input type="hidden" id="editIndex">
 
           <div class="mb-3">
-            <label for="editSelect" class="form-label fw-semibold">Nama Item <span class="text-danger">*</span></label>
+            <label for="editSelect" class="form-label fw-semibold">Item Name <span class="text-danger">*</span></label>
             <select class="form-select" id="editSelect">
-              <option value="">-- Pilih item --</option>
+              <option value="">-- Choose item --</option>
               <?php foreach ($katalog as $k): ?>
                 <option value="<?= $k['id'] ?>" data-price="<?= $k['price'] ?>">
                   <?= htmlspecialchars($k['name']) ?>
                 </option>
               <?php endforeach; ?>
             </select>
-            <div class="invalid-feedback">Pilih item terlebih dahulu.</div>
+            <div class="invalid-feedback">Choose item First.</div>
           </div>
 
           <div class="mb-3">
@@ -372,22 +363,22 @@ foreach ($invoiceItems as $item) {
               <span class="input-group-text">Rp</span>
               <input type="text" class="form-control bg-light text-secondary" id="editPriceDisplay" readonly>
             </div>
-            <small class="text-secondary">Otomatis dari katalog.</small>
+            <small class="text-secondary">Automatic from catalog.</small>
           </div>
 
           <div class="p-3 bg-light rounded">
             <div class="d-flex justify-content-between">
-              <span class="text-secondary">Amount:</span>
-              <span class="fw-semibold" id="editPreviewAmount">Rp 0</span>
+              <span class="text-black">Amount:</span>
+              <span class="fw-semibold text-black" id="editPreviewAmount">Rp 0</span>
             </div>
           </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
           <button type="button" class="btn btn-warning" onclick="saveEditItem()">
-            <i class="bi bi-check-lg me-1"></i>Simpan
+            <i class="bi bi-check-lg me-1"></i>Save
           </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
@@ -402,15 +393,15 @@ foreach ($invoiceItems as $item) {
         </div>
         <div class="modal-body text-center pt-0">
           <div class="mb-3"><i class="bi bi-trash3 text-danger" style="font-size:2.5rem"></i></div>
-          <h5 class="mb-1">Hapus Item?</h5>
+          <h5 class="mb-1">Delete Item?</h5>
           <p class="text-secondary small mb-0" id="deleteItemName"></p>
         </div>
         <div class="modal-footer justify-content-center border-0 pt-0">
           <input type="hidden" id="deleteIndex">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
           <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete()">
-            <i class="bi bi-trash3 me-1"></i>Hapus
+            <i class="bi bi-trash3 me-1"></i>Delete
           </button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
@@ -422,7 +413,7 @@ foreach ($invoiceItems as $item) {
     <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert">
       <div class="d-flex">
         <div class="toast-body" id="successToastBody">
-          Berhasil.
+          Success.
         </div>
 
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast">
@@ -434,7 +425,7 @@ foreach ($invoiceItems as $item) {
     <div id="deleteToast" class="toast align-items-center text-bg-danger border-0 mt-2" role="alert">
       <div class="d-flex">
         <div class="toast-body" id="deleteToastBody">
-          Item berhasil dihapus.
+          Item successfully Deleted.
         </div>
 
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast">
@@ -483,8 +474,8 @@ foreach ($invoiceItems as $item) {
           '<td class="text-end">' + formatRp(item.price) + '</td>' +
           '<td class="text-end">' + formatRp(amount) + '</td>' +
           '<td class="text-center d-print-none">' +
-          '<button class="btn btn-warning btn-sm me-1" onclick="openEditModal(' + i + ')" title="Edit"><i class="bi bi-pencil-square"></i></button>' +
-          '<button class="btn btn-danger btn-sm" onclick="openDeleteModal(' + i + ')" title="Hapus"><i class="bi bi-trash3"></i></button>' +
+          '<button class="btn btn-outline-warning btn-sm me-1" onclick="openEditModal(' + i + ')" title="Edit"><i class="bi bi-pencil-square"></i></button>' +
+          '<button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(' + i + ')" title="Hapus"><i class="bi bi-trash3"></i></button>' +
           '</td>';
         tbody.appendChild(tr);
       });
@@ -497,6 +488,11 @@ foreach ($invoiceItems as $item) {
       const fmt = formatRp(total);
       document.getElementById('subtotalDisplay').textContent = fmt;
       document.getElementById('totalDisplay').textContent = fmt;
+    }
+
+    // ── PDF ────────────────────────────────────────────────────────────────
+    function buatPDF() {
+      window.location.href = 'invoice-pdf.php?no_invoice=INV-001&customer=' + encodeURIComponent('Azura Mishimoto');
     }
 
     // ── ADD ────────────────────────────────────────────────────────────────
@@ -542,7 +538,7 @@ foreach ($invoiceItems as $item) {
       document.getElementById('addPreviewAmount').textContent = 'Rp 0';
 
       bootstrap.Modal.getInstance(document.getElementById('addItemModal')).hide();
-      showSuccessToast("Item berhasil ditambahkan.");
+      showSuccessToast("Item successfully added.");
     }
 
     // ── EDIT ───────────────────────────────────────────────────────────────
@@ -606,7 +602,7 @@ foreach ($invoiceItems as $item) {
 
       renderTable();
       bootstrap.Modal.getInstance(document.getElementById('editItemModal')).hide();
-      showSuccessToast("Item berhasil diperbarui.");
+      showSuccessToast("Item successfully Updated.");
     }
 
     // ── DELETE ─────────────────────────────────────────────────────────────
@@ -628,7 +624,7 @@ foreach ($invoiceItems as $item) {
         document.getElementById('deleteItemModal')
       ).hide();
 
-      showDeleteToast("Item berhasil dihapus.");
+      showDeleteToast("Item successfully Deleted.");
 
     }
 

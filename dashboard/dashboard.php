@@ -11,61 +11,49 @@ $month_short = [1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 =>
 $month_full = [1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'];
 
 // ── 1. KPI SUMMARY (max 4 cards) ─────────────────────────────
-// These 4 numbers answer: "how's revenue today, do I have unpaid
-// invoices, how busy is the business, and is it growing." Nothing
-// beyond that goes here — extra KPIs belong on the Report page.
-$revenue_today = 25500000;
-$revenue_yesterday = 21000000;
-$outstanding_total = 18400000;
-$outstanding_total_prev = 15200000;
-$outstanding_count = 9;
-$invoice_this_month = 195;
-$invoice_last_month = 210;
-$total_customer = 342;
-$total_customer_prev = 331;
+$total_revenue = 543000000;
+$total_revenue_prev = 498000000;
+$total_unpaid = 18400000;
+$total_unpaid_prev = 15200000;
+$total_overdue = 6600000;
+$total_overdue_prev = 8100000;
+$total_invoice = 195;
+$total_invoice_prev = 210;
 
-// ── 2. REVENUE ANALYTICS (single main chart) ─────────────────
-$revenue_hourly = [1250000, 450000, 3200000, 900000, 2100000, 750000, 4800000, 300000, 1500000, 2250000, 5600000, 450000, 1900000];
-$hour_labels = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+// ── 2. REVENUE ANALYTICS (single main chart) ──────────────────
+// Daily → per day name (Sun..Sat)
+$revenue_daily = [4100000, 3850000, 5200000, 2950000, 7800000, 9500000, 8200000];
+$day_labels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-$revenue_daily_week = [3850000, 5200000, 2950000, 7800000, 9500000, 8200000, 4100000];
-$day_labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+// Weekly → per week of current month (matches revenue.php "weekly")
+$revenue_monthly = [18500000, 21200000, 19800000, 23400000, 15600000];
+$week_labels = ['Week 1 ' . $month_full[$active_month], 'Week 2 ' . $month_full[$active_month], 'Week 3 ' . $month_full[$active_month], 'Week 4 ' . $month_full[$active_month], 'Week 5 ' . $month_full[$active_month]];
 
-$revenue_daily_month = [850000, 1200000, 950000, 2100000, 1800000, 3200000, 2750000, 1100000, 1400000, 980000, 2300000, 1950000, 2800000, 3100000, 900000, 1600000, 2050000, 1750000, 2900000, 3400000, 2200000, 1300000, 1500000, 2600000, 1850000, 3050000, 2400000, 1700000, 2100000, 2800000];
-$date_labels = range(1, count($revenue_daily_month));
-
-$revenue_12_months = [42000000, 38000000, 55000000, 49000000, 61000000, 58000000, 72000000, 65000000, 70000000, 63000000, 75000000, 68900000];
-$month_12_labels = [];
-for ($i = 11; $i >= 0; $i--) {
-    $m = $active_month - $i;
-    $y = $active_year;
-    if ($m <= 0) {
-        $m += 12;
-        $y--;
-    }
-    $month_12_labels[] = $month_short[$m] . ' ' . $y;
+// Monthly → per month, Jan-Dec (matches revenue.php "monthly")
+$revenue_yearly = [42000000, 38000000, 55000000, 49000000, 61000000, 58000000, 72000000, 65000000, 70000000, 63000000, 75000000, 68900000];
+$month_labels = [];
+for ($m = 1; $m <= 12; $m++) {
+    $month_labels[] = $month_full[$m];
 }
 
-// ── 3. BUSINESS ALERTS (only shown when something needs action) ─
-// Empty array = "No urgent business alerts." Keep this list short;
-// it should only contain things that cost money if ignored.
-$business_alerts = [
-    ['level' => 'danger', 'icon' => 'bi-exclamation-octagon', 'title' => '14 invoices overdue', 'desc' => 'Rp 6,600,000 unpaid, past due date.'],
-    ['level' => 'danger', 'icon' => 'bi-calendar-x', 'title' => '4 invoices due today', 'desc' => 'Rp 2,100,000 due for collection today.'],
-    ['level' => 'warning', 'icon' => 'bi-box-seam', 'title' => 'Stock running low', 'desc' => 'Monitor LG 24" has only 3 units left.'],
-    ['level' => 'warning', 'icon' => 'bi-person-x', 'title' => 'Customers paying late', 'desc' => '3 customers overdue for more than 30 days.'],
-];
-
-// ── 4. TOP SELLING PRODUCTS (top 5 only) ─────────────────────
+// ── 3. TOP SELLING PRODUCTS (top 5 only) ─────────────────────
 $top_products = [
-    ['name' => 'Laptop Asus VivoBook', 'sold' => 42, 'revenue' => 31500000],
-    ['name' => 'Smartphone Samsung', 'sold' => 35, 'revenue' => 14000000],
-    ['name' => 'Monitor LG 24 Inch', 'sold' => 28, 'revenue' => 5040000],
-    ['name' => 'Printer Epson L3210', 'sold' => 21, 'revenue' => 4620000],
-    ['name' => 'Gaming Headset', 'sold' => 18, 'revenue' => 630000],
+    ['name' => 'Laptop Asus VivoBook', 'sold' => 42],
+    ['name' => 'Smartphone Samsung', 'sold' => 35],
+    ['name' => 'Monitor LG 24 Inch', 'sold' => 28],
+    ['name' => 'Printer Epson L3210', 'sold' => 21],
+    ['name' => 'Gaming Headset', 'sold' => 18],
 ];
 
-// ── 5. RECENT TRANSACTIONS (max 5) ────────────────────────────
+// ── 5. OVERDUE CUSTOMERS (past due date) ──────────────────────
+$overdue_customers = [
+    ['customer' => 'Doni Setiawan', 'amount' => 1500000, 'due_date' => '2026-07-02'],
+    ['customer' => 'Rina Kartika', 'amount' => 2400000, 'due_date' => '2026-06-28'],
+    ['customer' => 'Bagus Prakoso', 'amount' => 900000, 'due_date' => '2026-07-05'],
+    ['customer' => 'Siti Nurhaliza', 'amount' => 1800000, 'due_date' => '2026-06-20'],
+];
+
+// ── 6. RECENT TRANSACTIONS (max 5) ────────────────────────────
 $recent_transactions = [
     ['no' => 'INV-013', 'customer' => 'Teguh Wibowo', 'total' => 1900000, 'status' => 'Pending'],
     ['no' => 'INV-012', 'customer' => 'Laila Sari', 'total' => 450000, 'status' => 'Paid'],
@@ -94,11 +82,20 @@ function trend_icon(int $a, int $b): string
 {
     return $a >= $b ? 'bi-arrow-up-short' : 'bi-arrow-down-short';
 }
+function days_overdue(string $date): int
+{
+    $due = new DateTime($date);
+    $today = new DateTime();
+    $diff = $today->diff($due);
+    return $diff->days;
+}
+function format_date_id(string $date): string
+{
+    $bulan = ['01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr', '05' => 'May', '06' => 'Jun', '07' => 'Jul', '08' => 'Aug', '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'];
+    [$y, $m, $d] = explode('-', $date);
+    return $d . ' ' . $bulan[$m] . ' ' . $y;
+}
 
-$change_revenue = pct_change($revenue_today, $revenue_yesterday);
-$change_outstanding = pct_change($outstanding_total, $outstanding_total_prev);
-$change_invoice = pct_change($invoice_this_month, $invoice_last_month);
-$change_customer = pct_change($total_customer, $total_customer_prev);
 
 ?>
 <!DOCTYPE html>
@@ -113,7 +110,11 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        /* ── Base rhythm ─────────────────────────────────────── */
+        /* ── Base rhythm ── */
+        .app-main {
+            background: var(--bs-tertiary-bg);
+        }
+
         .app-content {
             padding-bottom: 2rem;
         }
@@ -131,7 +132,7 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
             margin-bottom: .9rem;
         }
 
-        /* ── KPI cards ───────────────────────────────────────── */
+        /* ── KPI cards ── */
         .kpi-card {
             border: 1px solid var(--bs-border-color);
         }
@@ -176,48 +177,7 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
             color: #e05260;
         }
 
-        /* ── Alerts ──────────────────────────────────────────── */
-        .alert-row {
-            border-left: 3px solid;
-            padding: .7rem 1rem;
-            border-radius: 6px;
-            display: flex;
-            gap: .75rem;
-            align-items: flex-start;
-        }
-
-        .alert-row.level-danger {
-            border-left-color: #e05260;
-            background: rgba(224, 82, 96, .07);
-        }
-
-        .alert-row.level-warning {
-            border-left-color: #d9a441;
-            background: rgba(217, 164, 65, .07);
-        }
-
-        .no-alerts {
-            display: flex;
-            align-items: center;
-            gap: .6rem;
-            color: #2fb380;
-            padding: .6rem 0;
-        }
-
-        /* ── Chart card ──────────────────────────────────────── */
-        .period-tab .nav-link {
-            border-radius: 6px;
-            font-size: .82rem;
-            padding: 4px 12px;
-            color: var(--bs-secondary-color);
-        }
-
-        .period-tab .nav-link.active {
-            background: var(--bs-primary);
-            color: #fff;
-        }
-
-        /* ── Top products ────────────────────────────────────── */
+        /* ── Top products ── */
         .product-row {
             display: flex;
             align-items: center;
@@ -242,7 +202,7 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
             flex-shrink: 0;
         }
 
-        /* ── Cards general ───────────────────────────────────── */
+        /* ── Cards general ── */
         .card {
             border: 1px solid var(--bs-border-color);
             box-shadow: none;
@@ -254,11 +214,6 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
         }
 
         @media (max-width: 767.98px) {
-            .period-tab {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-            }
-
             .card-header {
                 flex-wrap: wrap;
                 gap: .5rem;
@@ -270,243 +225,264 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
 <body class="layout-fixed fixed-header sidebar-expand-lg sidebar-collapse">
     <div class="app-wrapper">
 
-        <?php include "../itu diapain/header.php"; ?>
+        <?php include "../component/header.php"; ?>
         <?php $activePage = 'dashboard';
-        include "../itu diapain/sidebar.php"; ?>
+        include "../component/sidebar.php"; ?>
 
-        <div class="content-wrapper">
+        <div class="app-main">
             <div class="app-content p-3">
 
                 <!-- Page Header -->
-                <div class="content-header px-3 pt-3 pb-2">
+                <div class="content-header pe-3 py-3">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
+
+                        <div class="row">
                             <div class="col-sm-6">
-                                <h3 class="mb-0">Dashboard</h3>
+                                <h3>Dashboard</h3>
                                 <small class="text-muted"><?= date('l, d') ?> <?= $month_full[$active_month] ?>
                                     <?= $active_year ?></small>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-end">
+                                    <li class="breadcrumb-item active">
+                                        <a>Dashboard</a>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid px-4">
+
+                <!-- ══ 1. KPI SUMMARY ══ -->
+                <div class="dash-section">
+                    <div class="row g-3">
+                        <div class="col-6 col-lg-3">
+                            <div class="card kpi-card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <span class="kpi-icon" style="background:rgba(47,179,128,.15)"><i
+                                                class="bi bi-cash-coin" style="color:#2fb380"></i></span>
+                                        <div class="kpi-value"><?= rupiah($total_revenue) ?></div>
+                                    </div>
+                                    <div class="kpi-label">Total Revenue</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3">
+                            <div class="card kpi-card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <span class="kpi-icon" style="background:rgba(217,164,65,.15)"><i
+                                                class="bi bi-hourglass-split" style="color:#d9a441"></i></span>
+                                        <div class="kpi-value"><?= rupiah($total_unpaid) ?></div>
+                                    </div>
+                                    <div class="kpi-label">Total Unpaid</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3">
+                            <div class="card kpi-card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <span class="kpi-icon" style="background:rgba(224,82,96,.15)"><i
+                                                class="bi bi-exclamation-octagon" style="color:#e05260"></i></span>
+                                        <div class="kpi-value"><?= rupiah($total_overdue) ?></div>
+                                    </div>
+                                    <div class="kpi-label">Total Overdue</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-3">
+                            <div class="card kpi-card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <span class="kpi-icon" style="background:rgba(108,142,235,.15)"><i
+                                                class="bi bi-file-earmark-text" style="color:#6c8eeb"></i></span>
+                                        <div class="kpi-value"><?= $total_invoice ?></div>
+                                    </div>
+                                    <div class="kpi-label">Total Invoice</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="container-fluid mt-2">
-
-                    <!-- ══ 1. KPI SUMMARY ═══════════════════════════════════ -->
-                    <div class="dash-section">
-                        <div class="row g-3">
-                            <div class="col-6 col-lg-3">
-                                <div class="card kpi-card h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <span class="kpi-icon" style="background:rgba(47,179,128,.15)"><i
-                                                    class="bi bi-cash-coin" style="color:#2fb380"></i></span>
-                                            <span
-                                                class="trend <?= trend_class($revenue_today, $revenue_yesterday) ?>"><i
-                                                    class="bi <?= trend_icon($revenue_today, $revenue_yesterday) ?>"></i><?= $change_revenue ?></span>
+                <!-- ══ 2. REVENUE ANALYTICS + TOP SELLING PRODUCTS ══════ -->
+                <div class="dash-section">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-8">
+                            <div class="dash-section-title">Revenue Analytics</div>
+                            <div class="card h-100">
+                                <div
+                                    class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h3 class="card-title mb-0 fs-6">Revenue</h3>
+                                    <div class="d-flex align-items-center ms-auto">
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-primary active period-btn"
+                                                data-period="daily">Daily</button>
+                                            <button class="btn btn-sm btn-outline-primary period-btn"
+                                                data-period="weekly">Weekly</button>
+                                            <button class="btn btn-sm btn-outline-primary period-btn"
+                                                data-period="monthly">Monthly</button>
                                         </div>
-                                        <div class="kpi-value"><?= rupiah($revenue_today) ?></div>
-                                        <div class="kpi-label">Today's Revenue</div>
                                     </div>
+                                        <div class="d-flex justify-content-between align-items-center ms-auto">
+                                            <a href="../revenue/revenue.php"
+                                                class="btn btn-sm btn-link text-decoration-none">
+                                                View Revenue <i class="bi bi-arrow-right ms-1"></i></a>
+                                        </div>
                                 </div>
-                            </div>
-
-                            <div class="col-6 col-lg-3">
-                                <div class="card kpi-card h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <span class="kpi-icon" style="background:rgba(217,164,65,.15)"><i
-                                                    class="bi bi-hourglass-split" style="color:#d9a441"></i></span>
-                                            <span
-                                                class="trend <?= trend_class($outstanding_total, $outstanding_total_prev, true) ?>"><i
-                                                    class="bi <?= trend_icon($outstanding_total, $outstanding_total_prev) ?>"></i><?= $change_outstanding ?></span>
-                                        </div>
-                                        <div class="kpi-value"><?= rupiah($outstanding_total) ?></div>
-                                        <div class="kpi-label">Outstanding Invoice · <?= $outstanding_count ?> unpaid
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-6 col-lg-3">
-                                <div class="card kpi-card h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <span class="kpi-icon" style="background:rgba(108,142,235,.15)"><i
-                                                    class="bi bi-file-earmark-text" style="color:#6c8eeb"></i></span>
-                                            <span
-                                                class="trend <?= trend_class($invoice_this_month, $invoice_last_month) ?>"><i
-                                                    class="bi <?= trend_icon($invoice_this_month, $invoice_last_month) ?>"></i><?= $change_invoice ?></span>
-                                        </div>
-                                        <div class="kpi-value"><?= $invoice_this_month ?></div>
-                                        <div class="kpi-label">Total Invoice · this month</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-6 col-lg-3">
-                                <div class="card kpi-card h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <span class="kpi-icon" style="background:rgba(160,120,235,.15)"><i
-                                                    class="bi bi-people" style="color:#a078eb"></i></span>
-                                            <span
-                                                class="trend <?= trend_class($total_customer, $total_customer_prev) ?>"><i
-                                                    class="bi <?= trend_icon($total_customer, $total_customer_prev) ?>"></i><?= $change_customer ?></span>
-                                        </div>
-                                        <div class="kpi-value"><?= $total_customer ?></div>
-                                        <div class="kpi-label">Total Customer</div>
-                                    </div>
+                                <div class="card-body">
+                                    <canvas id="mainChart" height="110"></canvas>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- ══ 2. BUSINESS ALERTS ═══════════════════════════════ -->
-                    <div class="dash-section">
-                        <div class="dash-section-title">Business Alerts</div>
-                        <div class="card">
-                            <div class="card-body">
-                                <?php if (empty($business_alerts)): ?>
-                                    <div class="no-alerts">
-                                        <i class="bi bi-check-circle fs-5"></i>
-                                        <span>No urgent business alerts.</span>
-                                    </div>
-                                <?php else: ?>
-                                    <div class="row g-2">
-                                        <?php foreach ($business_alerts as $a): ?>
-                                            <div class="col-12 col-md-6">
-                                                <div class="alert-row level-<?= $a['level'] ?>">
-                                                    <i class="bi <?= $a['icon'] ?> text-<?= $a['level'] ?>"></i>
-                                                    <div>
-                                                        <div class="fw-semibold small"><?= $a['title'] ?></div>
-                                                        <small class="text-muted"><?= $a['desc'] ?></small>
-                                                    </div>
-                                                </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="dash-section-title">Top Selling Products</div>
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <?php foreach ($top_products as $i => $p): ?>
+                                        <div class="product-row">
+                                            <span class="product-rank"><?= $i + 1 ?></span>
+                                            <div class="flex-grow-1">
+                                                <div class="small fw-semibold"><?= $p['name'] ?></div>
                                             </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ══ 3. REVENUE ANALYTICS ═════════════════════════════ -->
-                    <div class="dash-section">
-                        <div class="dash-section-title">Revenue Analytics</div>
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h3 class="card-title mb-0 fs-6">Revenue Trend</h3>
-                                <ul class="nav period-tab gap-1" id="periodTab">
-                                    <li class="nav-item"><a class="nav-link active" href="#"
-                                            data-period="daily">Daily</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#" data-period="weekly">Weekly</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="#" data-period="monthly">Monthly</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="#" data-period="yearly">Yearly</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="mainChart" height="90"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ══ 4. TOP SELLING PRODUCTS + 5. RECENT TRANSACTIONS ═ -->
-                    <div class="dash-section">
-                        <div class="row g-3">
-                            <div class="col-12 col-lg-5">
-                                <div class="dash-section-title">Top Selling Products</div>
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <?php foreach ($top_products as $i => $p): ?>
-                                            <div class="product-row">
-                                                <span class="product-rank"><?= $i + 1 ?></span>
-                                                <div class="flex-grow-1">
-                                                    <div class="small fw-semibold"><?= $p['name'] ?></div>
-                                                    <small class="text-muted"><?= $p['sold'] ?> sold</small>
-                                                </div>
-                                                <div class="text-end small fw-semibold"><?= rupiah($p['revenue']) ?></div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
+                                            <div class="text-end small fw-semibold"><?= $p['sold'] ?> Sold</div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="text-center border-top py-2">
+                                    <a href="../revenue/revenue.php"
+                                        class="btn btn-sm btn-link text-decoration-none">View
+                                        Detail Top Selling
+                                        <i class="bi bi-arrow-right ms-1"></i></a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="col-12 col-lg-7">
-                                <div class="dash-section-title">Recent Transactions</div>
-                                <div class="card h-100">
-                                    <div class="card-body p-0 d-flex flex-column">
-                                        <div class="table-responsive flex-grow-1">
-                                            <table class="table table-hover align-middle mb-0">
-                                                <thead>
+                <!-- ══ 3. RECENT TRANSACTIONS + OVERDUE CUSTOMERS ═══════ -->
+                <div class="dash-section pt-4">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-7">
+                            <div class="dash-section-title">Recent Transactions</div>
+                            <div class="card h-100">
+                                <div class="card-body p-0 d-flex flex-column">
+                                    <div class="table-responsive flex-grow-1">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Invoice</th>
+                                                    <th>Customer</th>
+                                                    <th class="text-end">Total</th>
+                                                    <th class="text-center">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($recent_transactions as $t):
+                                                    switch ($t['status']) {
+                                                        case 'Paid':
+                                                            $badge = 'success';
+                                                            break;
+
+                                                        case 'Pending':
+                                                            $badge = 'warning';
+                                                            break;
+
+                                                        case 'Unpaid':
+                                                            $badge = 'danger';
+                                                            break;
+
+                                                        default:
+                                                            $badge = 'danger';
+                                                            break;
+                                                    }
+                                                    ?>
                                                     <tr>
-                                                        <th>Invoice</th>
-                                                        <th>Customer</th>
-                                                        <th class="text-end">Total</th>
-                                                        <th class="text-center">Status</th>
+                                                        <td><?= $t['no'] ?></td>
+                                                        <td><?= htmlspecialchars($t['customer']) ?></td>
+                                                        <td class="text-end fw-semibold"><?= rupiah($t['total']) ?></td>
+                                                        <td class="text-center">
+                                                            <span
+                                                                class="badge text-bg-<?= $badge ?>"><?= $t['status'] ?></span>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php foreach ($recent_transactions as $t): ?>
-                                                        <tr>
-                                                            <td><?= $t['no'] ?></td>
-                                                            <td><?= htmlspecialchars($t['customer']) ?></td>
-                                                            <td class="text-end fw-semibold"><?= rupiah($t['total']) ?></td>
-                                                            <td class="text-center">
-                                                                <?php
-                                                                switch ($t['status']) {
-                                                                    case 'Paid':
-                                                                        $badge = 'success';
-                                                                        break;
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-center border-top py-2">
+                                        <a href="../invoice/table.invoice.php"
+                                            class="btn btn-sm btn-link text-decoration-none">View All Transactions
+                                            <i class="bi bi-arrow-right ms-1"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                                                    case 'Pending':
-                                                                        $badge = 'warning';
-                                                                        break;
-
-                                                                    case 'Unpaid':
-                                                                        $badge = 'danger';
-                                                                        break;
-
-                                                                    default:
-                                                                        $badge = 'secondary';
-                                                                        break;
-                                                                }
-                                                                ?>
-                                                                <span class="badge <?= $badge ?>"><?= $t['status'] ?></span>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="text-center border-top py-2">
-                                            <a href="../invoice/table.invoice.php"
-                                                class="btn btn-sm btn-link text-decoration-none">View All Transactions
-                                                <i class="bi bi-arrow-right ms-1"></i></a>
-                                        </div>
+                        <div class="col-12 col-lg-5">
+                            <div class="dash-section-title">Overdue Customers</div>
+                            <div class="card h-100">
+                                <div class="card-body p-0 d-flex flex-column">
+                                    <div class="table-responsive flex-grow-1">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Customer</th>
+                                                    <th class="text-end">Unpaid</th>
+                                                    <th class="text-center">Overdue Since</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($overdue_customers as $o): ?>
+                                                    <tr>
+                                                        <td><?= htmlspecialchars($o['customer']) ?></td>
+                                                        <td class="text-end fw-semibold text-danger">
+                                                            <?= rupiah($o['amount']) ?></td>
+                                                        <td class="text-center small">
+                                                            <?= format_date_id($o['due_date']) ?>
+                                                            <div class="text-muted" style="font-size:.72rem">
+                                                                <?= days_overdue($o['due_date']) ?> days</div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-center border-top py-2">
+                                        <a href="../dashboard/arrears.php"
+                                            class="btn btn-sm btn-link text-decoration-none">View All Overdue
+                                            <i class="bi bi-arrow-right ms-1"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                </div><!-- /container-fluid -->
-            </div>
+            </div><!-- /container-fluid -->
         </div>
+        <?php include "../component/footer.php"; ?>
+    </div>
 
-        <?php include "../itu diapain/footer.php"; ?>
     </div>
 
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
+        const REVENUE_COLOR = '#2fb380';
+
         const DATA = {
-            daily: { labels: <?= json_encode($hour_labels) ?>, values: <?= json_encode($revenue_hourly) ?>, color: '#2fb380' },
-            weekly: { labels: <?= json_encode($day_labels) ?>, values: <?= json_encode($revenue_daily_week) ?>, color: '#6c8eeb' },
-            monthly: { labels: <?= json_encode($date_labels) ?>, values: <?= json_encode($revenue_daily_month) ?>, color: '#d9a441' },
-            yearly: { labels: <?= json_encode($month_12_labels) ?>, values: <?= json_encode($revenue_12_months) ?>, color: '#a078eb' }
+            daily: { labels: <?= json_encode($day_labels) ?>, revenue: <?= json_encode($revenue_daily) ?> },
+            weekly: { labels: <?= json_encode($week_labels) ?>, revenue: <?= json_encode($revenue_monthly) ?> },
+            monthly: { labels: <?= json_encode($month_labels) ?>, revenue: <?= json_encode($revenue_yearly) ?> },
         };
 
         function rupiahShort(v) {
@@ -526,21 +502,26 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
                 type: 'line',
                 data: {
                     labels: d.labels,
-                    datasets: [{
-                        label: 'Revenue',
-                        data: d.values,
-                        borderColor: d.color,
-                        backgroundColor: d.color + '1f',
-                        borderWidth: 2.5,
-                        pointBackgroundColor: d.color,
-                        pointRadius: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: d.revenue,
+                            borderColor: REVENUE_COLOR,
+                            backgroundColor: REVENUE_COLOR + '1f',
+                            borderWidth: 2.5,
+                            pointBackgroundColor: REVENUE_COLOR,
+                            pointRadius: 3,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => rupiahFull(c.parsed.y) } } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: c => rupiahFull(c.parsed.y) } }
+                    },
                     scales: {
                         y: { beginAtZero: true, ticks: { callback: rupiahShort }, grid: { color: 'rgba(255,255,255,.06)' } },
                         x: { grid: { display: false } }
@@ -550,12 +531,21 @@ $change_customer = pct_change($total_customer, $total_customer_prev);
         }
         buildMainChart('daily');
 
-        document.querySelectorAll('#periodTab .nav-link').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                document.querySelectorAll('#periodTab .nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                buildMainChart(link.dataset.period);
+        const periodButtons = document.querySelectorAll('.period-btn');
+
+        periodButtons.forEach(button => {
+            button.addEventListener('click', function () {
+
+                // Reset button
+                periodButtons.forEach(btn => {
+                    btn.classList.remove('active', 'btn-primary');
+                    btn.classList.add('btn-outline-primary');
+                });
+
+                this.classList.add('active', 'btn-primary');
+                this.classList.remove('btn-outline-primary');
+
+                buildMainChart(this.dataset.period);
             });
         });
     </script>

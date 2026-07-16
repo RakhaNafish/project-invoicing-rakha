@@ -60,28 +60,28 @@ $customers = [
 <body class="layout-fixed fixed-header sidebar-expand-lg sidebar-collapse">
     <div class="app-wrapper">
 
-        <?php include "../itu diapain/header.php"; ?>
+        <?php include "../component/header.php"; ?>
         <?php
         $activePage = 'customer';
-        include "../itu diapain/sidebar.php";
+        include "../component/sidebar.php";
         ?>
 
         <!-- Main Content -->
 
-        <div class="content-wrapper">
+        <div class="app-main bg-body-tertiary">
             <div class="app-content p-3">
 
-                <div class="content-header px-3 pt-3">
+                <div class="content-header pe-3 py-3">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h3 class="card-title">Data Customer</h3>
+                                <h3>Data Customer</h3>
                             </div>
 
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">
                                     <li class="breadcrumb-item">
-                                        <a href="../dashboard/dashboard.php">Dashboard</a>
+                                        <a href="../dashboard/dashboard.php" class="text-decoration-none">Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         <a>Customer</a>
@@ -93,190 +93,203 @@ $customers = [
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="container-fluid">
 
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                            <div class="input-group input-group-sm" style="max-width:250px;">
-                                <span class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </span>
-                                <input id="searchInput" type="search" class="form-control"
-                                    placeholder="Search Customer">
+                                <div class="input-group input-group-sm" style="max-width:250px;">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input id="searchInput" type="search" class="form-control"
+                                        placeholder="Search Customer">
+                                </div>
+
+                                <a href="add.php" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg"></i> Add Customer
+                                </a>
+
                             </div>
-
-                            <a href="tambah.php" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Add Customer
-                            </a>
-
                         </div>
-                    </div>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="customerTable" class="table table-striped table-hover align-middle">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Ref No</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th class="text-center">Phone</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <?php foreach ($customers as $i => $customer): ?>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="customerTable" class="table table-striped table-hover align-middle">
+                                    <thead>
                                         <tr>
-                                            <td class="text-center"><?= $i + 1; ?></td>
-                                            <td class="text-center"><?= $customer['ref_no']; ?></td>
-                                            <td><?= $customer['name']; ?></td>
-                                            <td><?= $customer['address']; ?></td>
-                                            <td class="text-center"><?= $customer['phone']; ?></td>
-                                            <td class="text-center">
-                                                <a href="edit.php?id=<?= $customer['id']; ?>" class="btn btn-warning btn-sm">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                            </td>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Ref No</th>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th class="text-center">Phone</th>
+                                            <th class="text-center" style="width:130px">Action</th>
                                         </tr>
+                                    </thead>
 
-                                    <?php endforeach; ?>
+                                    <tbody>
+                                        <?php foreach ($customers as $i => $customer): ?>
+                                            <tr>
+                                                <td class="text-center"><?= $i + 1; ?></td>
+                                                <td class="text-center"><?= $customer['ref_no']; ?></td>
+                                                <td><?= $customer['name']; ?></td>
+                                                <td><?= $customer['address']; ?></td>
+                                                <td class="text-center"><?= $customer['phone']; ?></td>
+                                                <td class="text-center">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item text-warning"
+                                                                    href="edit.php?id=<?= $customer['id']; ?>">
+                                                                    <i class="bi bi-pencil-square me-1"></i> Edit</a></li>
+                                                            <li><a class="dropdown-item text-danger" href="#">
+                                                                    <i class="bi bi-trash me-1"></i> Delete</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                </tbody>
+                                        <?php endforeach; ?>
 
-                            </table>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <span id="paginationText" class="small text-muted"></span>
-                            <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span id="paginationText" class="small text-muted"></span>
+                                <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
+                            </div>
                         </div>
                     </div>
+
                 </div>
-
             </div>
+
+
         </div>
+        <?php include "../component/footer.php"; ?>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../dist/js/adminlte.min.js"></script>
+        <script>
+            const searchInput = document.getElementById("searchInput");
 
-        <?php include "../itu diapain/footer.php"; ?>
+            const table = document.getElementById("customerTable");
+            const tbody = table.querySelector("tbody");
 
-    </div>
-    <script src="../dist/js/adminlte.min.js"></script>
-    <script>
-        const searchInput = document.getElementById("searchInput");
+            const allRows = Array.from(tbody.querySelectorAll("tr"));
 
-        const table = document.getElementById("customerTable");
-        const tbody = table.querySelector("tbody");
+            const pageCtrl = document.getElementById("paginationControls");
+            const pageTxt = document.getElementById("paginationText");
 
-        const allRows = Array.from(tbody.querySelectorAll("tr"));
+            const perPage = 10;
+            let currentPage = 1;
 
-        const pageCtrl = document.getElementById("paginationControls");
-        const pageTxt = document.getElementById("paginationText");
+            function getFilteredRows() {
 
-        const perPage = 10;
-        let currentPage = 1;
+                const keyword = searchInput.value.toLowerCase();
 
-        function getFilteredRows() {
+                return allRows.filter(row => {
 
-            const keyword = searchInput.value.toLowerCase();
+                    const text = row.textContent.toLowerCase();
 
-            return allRows.filter(row => {
+                    if (keyword && text.indexOf(keyword) === -1)
+                        return false;
 
-                const text = row.textContent.toLowerCase();
+                    return true;
 
-                if (keyword && text.indexOf(keyword) === -1)
-                    return false;
-
-                return true;
-
-            });
-
-        }
-
-        function render() {
-
-            const filteredRows = getFilteredRows();
-
-            const total = filteredRows.length;
-
-            const pages = Math.max(1, Math.ceil(total / perPage));
-
-            currentPage = Math.min(currentPage, pages);
-
-            const start = (currentPage - 1) * perPage;
-
-            allRows.forEach(row => {
-                row.style.display = "none";
-            });
-
-            filteredRows
-                .slice(start, start + perPage)
-                .forEach(row => {
-                    row.style.display = "";
                 });
 
-            pageTxt.textContent =
-                total === 0
-                    ? "No data avaiable"
-                    : `Show ${start + 1}–${Math.min(start + perPage, total)} from ${total} data`;
+            }
 
-            pageCtrl.innerHTML = "";
+            function render() {
 
-            function addPage(label, targetPage, opts = {}) {
+                const filteredRows = getFilteredRows();
 
-                const li = document.createElement("li");
+                const total = filteredRows.length;
 
-                li.className =
-                    "page-item" +
-                    (opts.active ? " active" : "") +
-                    (opts.disabled ? " disabled" : "");
+                const pages = Math.max(1, Math.ceil(total / perPage));
 
-                if (opts.disabled) {
-                    li.innerHTML = `<span class="page-link">${label}</span>`;
-                } else {
-                    li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
-                    li.addEventListener("click", e => {
-                        e.preventDefault();
-                        currentPage = targetPage;
-                        render();
+                currentPage = Math.min(currentPage, pages);
+
+                const start = (currentPage - 1) * perPage;
+
+                allRows.forEach(row => {
+                    row.style.display = "none";
+                });
+
+                filteredRows
+                    .slice(start, start + perPage)
+                    .forEach((row, idx) => {
+                        row.style.display = "";
+                        row.cells[0].textContent = start + idx + 1;
                     });
+
+                pageTxt.textContent =
+                    total === 0
+                        ? "No data avaiable"
+                        : `Show ${start + 1}–${Math.min(start + perPage, total)} from ${total} data`;
+
+                pageCtrl.innerHTML = "";
+
+                function addPage(label, targetPage, opts = {}) {
+
+                    const li = document.createElement("li");
+
+                    li.className =
+                        "page-item" +
+                        (opts.active ? " active" : "") +
+                        (opts.disabled ? " disabled" : "");
+
+                    if (opts.disabled) {
+                        li.innerHTML = `<span class="page-link">${label}</span>`;
+                    } else {
+                        li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+                        li.addEventListener("click", e => {
+                            e.preventDefault();
+                            currentPage = targetPage;
+                            render();
+                        });
+                    }
+
+                    pageCtrl.appendChild(li);
+
                 }
 
-                pageCtrl.appendChild(li);
+                addPage("Previous", currentPage - 1, { disabled: currentPage <= 1 });
+
+                addPage("1", 1, { active: currentPage === 1 });
+
+                if (currentPage > 3) {
+                    addPage("...", null, { disabled: true });
+                }
+
+                for (let p = Math.max(2, currentPage - 1); p <= Math.min(pages - 1, currentPage + 1); p++) {
+                    addPage(String(p), p, { active: currentPage === p });
+                }
+
+                if (currentPage < pages - 2) {
+                    addPage("...", null, { disabled: true });
+                }
+
+                if (pages > 1) {
+                    addPage(String(pages), pages, { active: currentPage === pages });
+                }
+
+                addPage("Next", currentPage + 1, { disabled: currentPage >= pages });
 
             }
 
-            addPage("Previous", currentPage - 1, { disabled: currentPage <= 1 });
+            searchInput.addEventListener("input", () => {
+                currentPage = 1;
+                render();
+            });
 
-            addPage("1", 1, { active: currentPage === 1 });
-
-            if (currentPage > 3) {
-                addPage("...", null, { disabled: true });
-            }
-
-            for (let p = Math.max(2, currentPage - 1); p <= Math.min(pages - 1, currentPage + 1); p++) {
-                addPage(String(p), p, { active: currentPage === p });
-            }
-
-            if (currentPage < pages - 2) {
-                addPage("...", null, { disabled: true });
-            }
-
-            if (pages > 1) {
-                addPage(String(pages), pages, { active: currentPage === pages });
-            }
-
-            addPage("Next", currentPage + 1, { disabled: currentPage >= pages });
-
-        }
-
-        searchInput.addEventListener("input", () => {
-            currentPage = 1;
             render();
-        });
-
-        render();
-    </script>
+        </script>
 </body>
 
 </html>

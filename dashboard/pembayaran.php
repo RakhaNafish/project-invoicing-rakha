@@ -118,14 +118,14 @@ function rupiah(int $n): string
 <body class="layout-fixed fixed-header sidebar-expand-lg sidebar-collapse">
     <div class="app-wrapper">
 
-        <?php include "../itu diapain/header.php"; ?>
-        <?php include "../itu diapain/sidebar.php"; ?>
+        <?php include "../component/header.php"; ?>
+        <?php include "../component/sidebar.php"; ?>
 
-        <div class="content-wrapper">
+        <div class="app-main bg-body-tertiary">
             <div class="app-content p-3">
 
                 <!-- Page Header -->
-                <div class="content-header px-3 pt-3">
+                <div class="content-header px-3 py-3">
                     <div class="container-fluid">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
@@ -133,8 +133,10 @@ function rupiah(int $n): string
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end mb-0">
-                                    <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="payment.php">Payment</a></li>
+                                    <li class="breadcrumb-item"><a href="dashboard.php"
+                                            class="text-decoration-none">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="payment.php"
+                                            class="text-decoration-none">Payment</a></li>
                                     <li class="breadcrumb-item active"><?= $data_edit ? 'Edit' : 'Add' ?></li>
                                 </ol>
                             </div>
@@ -255,13 +257,13 @@ function rupiah(int $n): string
 
                             <hr class="my-4">
 
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="<?= htmlspecialchars($backUrl) ?>" class="btn btn-secondary">
-                                    Cancel
-                                </a>
+                            <div class="d-flex justify-content-start gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <?= $data_edit ? 'Save' : 'Save' ?>
                                 </button>
+                                <a href="<?= htmlspecialchars($backUrl) ?>" class="btn btn-secondary">
+                                    Cancel
+                                </a>
                             </div>
 
                         </form>
@@ -275,9 +277,10 @@ function rupiah(int $n): string
     </div>
     </div>
 
-    <?php include "../itu diapain/footer.php"; ?>
+    <?php include "../component/footer.php"; ?>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
         const selectInvoice = document.getElementById('selectInvoice');

@@ -1,14 +1,10 @@
-<?php
-$from = isset($_GET['from']) && $_GET['from'] === 'table' ? 'table' : 'invoice';
-$backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
-?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Invoice</title>
+    <title>Edit User</title>
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
@@ -25,7 +21,7 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h4>Edit Invoice</h4>
+                                <h3>Edit User</h3>
                             </div>
 
                             <div class="col-sm-6">
@@ -34,10 +30,10 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                                         <a href="../dashboard/dashboard.php" class="text-decoration-none">Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="<?= $backUrl ?>" class="text-decoration-none">Invoice</a>
+                                        <a href="index.php" class="text-decoration-none">Manage User</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        <a>Edit Invoice</a>
+                                        <a>Edit User</a>
                                     </li>
                                 </ol>
                             </div>
@@ -49,49 +45,49 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                     <section>
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Form Edit Invoice</h3>
+                                <h3 class="card-title">Form Edit User</h3>
                             </div>
 
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                        <label>Invoice No</label>
-                                        <input type="text" class="form-control" placeholder="Insert Invoice No">
-                                    </div>
-
-                                    <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="Insert Customer Name">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Issue_date</label>
-                                        <input type="date" class="form-control" placeholder="Insert Issue_date">
+                                        <input type="text" class="form-control" value="Azura Mishimoto">
                                     </div>
                                     <div class="form-group">
-                                        <label>Due_Date</label>
-                                        <input type="date" class="form-control" placeholder="Insert Due_Date">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" value="admin@example.com">
                                     </div>
-                                    <!-- <div class="form-group">
-                                        <label>Status</label>
-                                        <select class="form-control">
-                                            <option>Paid</option>
-                                            <option>Unpaid</option>
-                                            <option>Pending</option>
+                                    <div class="form-group">
+                                        <label>password</label>
+                                        <input type="text" class="form-control" value="password123">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        <select class="form-select">
+                                            <option value="Admin" selected>Admin</option>
+                                            <option value="User">User</option>
                                         </select>
-                                    </div> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="form-select">
+                                            <option value="Active" selected>Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
                                 </form>
                             </div>
                             <div class="card-footer">
-                                <a href="<?= $backUrl ?>" class="btn btn-warning">Update</a>
-                                <a href="<?= $backUrl ?>" class="btn btn-secondary">Cancel</a>
+                                <a href="index.php" class="btn btn-warning">Update</a>
+                                <a href="index.php" class="btn btn-secondary">Cancel</a>
                             </div>
                         </div>
                 </div>
                 </section>
             </div>
         </div>
-        <?php include "../component/footer.php"; ?>
+        <?php include "../component/footer.php" ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../dist/js/adminlte.min.js"></script>

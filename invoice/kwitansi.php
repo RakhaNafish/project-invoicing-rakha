@@ -2,7 +2,7 @@
 
 // Dummy data — sambungin DB nanti
 $no_invoice = $_GET['no_invoice'] ?? 'INV-001';
-$customer   = $_GET['customer'] ?? 'Azura Mishimoto';
+$customer = $_GET['customer'] ?? 'Azura Mishimoto';
 
 $invoiceItems = [
   ['name' => 'Laptop Asus VivoBook', 'qty' => 1, 'price' => 7500000],
@@ -89,24 +89,37 @@ $no_kwitansi = 'KW-' . date('Ym') . '-' . str_pad((string) rand(1, 999), 3, '0',
     }
 
     @media print {
-      .app-sidebar, .app-header, .app-footer, .sidebar-overlay, #live-region, .d-print-none {
+
+      .app-sidebar,
+      .app-header,
+      .app-footer,
+      .sidebar-overlay,
+      #live-region,
+      .d-print-none {
         display: none !important;
       }
-      .app-main, .content-wrapper, .app-content {
+
+      .app-main,
+      .content-wrapper,
+      .app-content {
         margin: 0 !important;
         padding: 0 !important;
       }
+
       .card {
         border: none !important;
         box-shadow: none !important;
       }
+
       body {
         background: #fff !important;
       }
+
       table.kwitansi-table th,
       table.kwitansi-table td {
         border-color: #000 !important;
       }
+
       @page {
         margin: 1.5cm;
       }
@@ -117,10 +130,10 @@ $no_kwitansi = 'KW-' . date('Ym') . '-' . str_pad((string) rand(1, 999), 3, '0',
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary sidebar-collapse reduce-motion app-loaded">
   <div class="app-wrapper">
 
-    <?php include "../itu diapain/header.php"; ?>
-    <?php include "../itu diapain/sidebar.php"; ?>
+    <?php include "../component/header.php"; ?>
+    <?php include "../component/sidebar.php"; ?>
 
-    <div class="content-wrapper">
+    <div class="app-main">
       <div class="app-content p-3">
 
         <div class="app-content-header d-print-none">
@@ -131,9 +144,10 @@ $no_kwitansi = 'KW-' . date('Ym') . '-' . str_pad((string) rand(1, 999), 3, '0',
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="../dashboard/dashboard.php">Dashboard</a></li>
-                  <li class="breadcrumb-item"><a href="table.invoice.php">Invoice</a></li>
-                  <li class="breadcrumb-item"><a href="invoice.php">See Invoice</a></li>
+                  <li class="breadcrumb-item"><a href="../dashboard/dashboard.php"
+                      class="text-decoration-none">Dashboard</a></li>
+                  <li class="breadcrumb-item"><a href="table.invoice.php" class="text-decoration-none">Invoice</a></li>
+                  <li class="breadcrumb-item"><a href="invoice.php" class="text-decoration-none">See Invoice</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Receipt</li>
                 </ol>
               </div>
@@ -142,68 +156,71 @@ $no_kwitansi = 'KW-' . date('Ym') . '-' . str_pad((string) rand(1, 999), 3, '0',
         </div>
 
         <div class="app-content">
-        <div class="container-fluid mb-3 d-print-none">
-          <button class="btn btn-primary" onclick="window.print()">
-            <i class="bi bi-printer"></i> Print Receipt
-          </button>
-          <a href="invoice.php" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Back
-          </a>
-        </div>
+          <div class="container-fluid mb-3 d-print-none">
+            <button class="btn btn-primary" onclick="window.print()">
+              <i class="bi bi-printer"></i> Print Receipt
+            </button>
+            <a href="invoice.php" class="btn btn-secondary">
+              <i class="bi bi-arrow-left"></i> Back
+            </a>
+          </div>
 
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body kwitansi-box">
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-body kwitansi-box">
 
-            <div class="kwitansi-logo">ArayaStore<br>Logo</div>
-            <div class="kwitansi-title">Receipt</div>
+                <div class="kwitansi-logo">Araya Store<br>Logo</div>
+                <div class="kwitansi-title">Receipt</div>
 
-            <div class="kwitansi-meta">Receipt Number: <span class="dots"><?= htmlspecialchars($no_kwitansi); ?></span></div>
-            <div class="kwitansi-meta">Received from: <span class="dots"><?= htmlspecialchars($customer); ?></span></div>
+                <div class="kwitansi-meta">Receipt Number: <span
+                    class="dots"><?= htmlspecialchars($no_kwitansi); ?></span></div>
+                <div class="kwitansi-meta">Received from: <span class="dots"><?= htmlspecialchars($customer); ?></span>
+                </div>
 
-            <table class="kwitansi-table">
-              <thead>
-                <tr>
-                  <th style="width:60px;">Nomor</th>
-                  <th>Product Details</th>
-                  <th style="width:180px;">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($invoiceItems as $i => $item): ?>
-                <tr>
-                  <td class="center"><?= $i + 1; ?></td>
-                  <td><?= htmlspecialchars($item['name']); ?> (<?= $item['qty']; ?>x)</td>
-                  <td class="right">Rp <?= number_format($item['qty'] * $item['price'], 0, ',', '.'); ?></td>
-                </tr>
-                <?php endforeach; ?>
-                <tr>
-                  <td><strong>TOTAL</strong></td>
-                  <td></td>
-                  <td class="right"><strong>Rp <?= number_format($total, 0, ',', '.'); ?></strong></td>
-                </tr>
-              </tbody>
-            </table>
+                <table class="kwitansi-table">
+                  <thead>
+                    <tr>
+                      <th style="width:60px;">Nomor</th>
+                      <th>Product Details</th>
+                      <th style="width:180px;">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($invoiceItems as $i => $item): ?>
+                      <tr>
+                        <td class="center"><?= $i + 1; ?></td>
+                        <td><?= htmlspecialchars($item['name']); ?> (<?= $item['qty']; ?>x)</td>
+                        <td class="right">Rp <?= number_format($item['qty'] * $item['price'], 0, ',', '.'); ?></td>
+                      </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                      <td><strong>TOTAL</strong></td>
+                      <td></td>
+                      <td class="right"><strong>Rp <?= number_format($total, 0, ',', '.'); ?></strong></td>
+                    </tr>
+                  </tbody>
+                </table>
 
-            <div class="kwitansi-footer">
-              <div><em>No. Invoice: <?= htmlspecialchars($no_invoice); ?></em></div>
-              <div class="kwitansi-ttd">
-                <div class="line">Signature<br>recipient of the money</div>
+                <div class="kwitansi-footer">
+                  <div><em>No. Invoice: <?= htmlspecialchars($no_invoice); ?></em></div>
+                  <div class="kwitansi-ttd">
+                    <div class="line">Signature<br>recipient of the money</div>
+                  </div>
+                </div>
+
               </div>
             </div>
-
-            </div>
           </div>
-        </div>
 
         </div>
 
       </div>
     </div>
 
-    <?php include "../itu diapain/footer.php"; ?>
+    <?php include "../component/footer.php"; ?>
 
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../dist/js/adminlte.min.js"></script>
 </body>
 

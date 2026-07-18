@@ -4,11 +4,16 @@
 // DUMMY DATA - Form Pembayaran
 // ============================
 
-$edit_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-
 // Asal halaman: 'invoice' = dari tombol Pay Now di invoice, default = dari payment.php
 $from = isset($_GET['from']) ? $_GET['from'] : '';
-$backUrl = ($from === 'invoice') ? '../invoice/invoice.php' : 'payment.php';
+$backUrl = match ($from) {
+    'invoice' => '../invoice/invoice.php',
+    'arrears' => 'arrears.php',
+    'outstanding' => 'outstanding.php',
+    default => 'payment.php',
+};
+// Setelah bayar, selalu balik ke halaman invoice (biar status lunas langsung kelihatan)
+$invoiceUrl = '../invoice/invoice.php';
 
 // Daftar invoice yang masih punya tagihan (dummy, untuk dropdown pilih invoice)
 $daftar_invoice = [
@@ -18,46 +23,27 @@ $daftar_invoice = [
     ['no_invoice' => 'INV-007', 'customer' => 'Hendra Wijaya', 'total_invoice' => 4800000, 'sudah_dibayar' => 4800000, 'sisa' => 0],
 ];
 
-// Jika mode edit, ambil data pembayaran existing (dummy)
-$data_edit = null;
-if ($edit_id !== null) {
-    $data_edit = [
-        'id' => $edit_id,
-        'tanggal' => '2026-06-21',
-        'no_invoice' => 'INV-011',
-        'customer' => 'Fajar Nugroho',
-        'total_invoice' => 5600000,
-        'sisa_sebelum' => 5600000,
-        'nominal' => 5600000,
-        'metode' => 'Transfer Bank',
-        'keterangan' => 'Pelunasan via BCA',
-    ];
-}
-
-// Jika datang dari tombol Pay Now di invoice, prefill invoice terkait
+// Jika datang dari tombol Pay (invoice / arrears / outstanding), prefill invoice terkait
 $prefill_invoice = null;
-if (!$data_edit && $from === 'invoice' && isset($_GET['no_invoice'])) {
+if (in_array($from, ['invoice', 'arrears', 'outstanding'], true) && isset($_GET['no_invoice'])) {
+    $total_invoice = (int) ($_GET['total'] ?? 0);
+    $sudah_dibayar = (int) ($_GET['dibayar'] ?? 0);
     $prefill_invoice = [
         'no_invoice' => $_GET['no_invoice'],
         'customer' => $_GET['customer'] ?? '',
-        'total_invoice' => (int) ($_GET['total'] ?? 0),
-        'sudah_dibayar' => 0,
-        'sisa' => (int) ($_GET['total'] ?? 0),
+        'total_invoice' => $total_invoice,
+        'sudah_dibayar' => $sudah_dibayar,
+        'sisa' => $total_invoice - $sudah_dibayar,
     ];
     array_unshift($daftar_invoice, $prefill_invoice);
 }
 
-// Data invoice terpilih untuk render awal (edit ATAU prefill dari Pay Now)
+// Status asal invoice (dikirim dari invoice.php saat Pay Now), fallback Pending
+$original_status = $_GET['status'] ?? 'Pending';
+
+// Data invoice terpilih untuk render awal (prefill dari Pay Now)
 $initial = null;
-if ($data_edit) {
-    $initial = [
-        'no_invoice' => $data_edit['no_invoice'],
-        'customer' => $data_edit['customer'],
-        'total_invoice' => $data_edit['total_invoice'],
-        'dibayar' => 0,
-        'sisa' => $data_edit['sisa_sebelum'],
-    ];
-} elseif ($prefill_invoice) {
+if ($prefill_invoice) {
     $initial = [
         'no_invoice' => $prefill_invoice['no_invoice'],
         'customer' => $prefill_invoice['customer'],
@@ -79,7 +65,7 @@ function rupiah(int $n): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $data_edit ? 'Edit Pembayaran' : 'Tambah Pembayaran' ?></title>
+    <title>Tambah Pembayaran</title>
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -129,7 +115,7 @@ function rupiah(int $n): string
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h3><?= $data_edit ? 'Edit Payment' : 'Add Payment' ?></h3>
+                                <h3>Add Payment</h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end mb-0">
@@ -137,7 +123,7 @@ function rupiah(int $n): string
                                             class="text-decoration-none">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a href="payment.php"
                                             class="text-decoration-none">Payment</a></li>
-                                    <li class="breadcrumb-item active"><?= $data_edit ? 'Edit' : 'Add' ?></li>
+                                    <li class="breadcrumb-item active">Add</li>
                                 </ol>
                             </div>
                         </div>
@@ -148,22 +134,19 @@ function rupiah(int $n): string
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
-                                <?= $data_edit ? 'Form Edit Payment' : 'Form Payment Invoice' ?>
+                                Form Payment Invoice
                             </h3>
                         </div>
                         <div class="card-body">
 
                             <form id="formPembayaran" method="POST" action="#">
 
-                                <?php if ($data_edit): ?>
-                                    <input type="hidden" name="id" value="<?= $data_edit['id'] ?>">
-                                <?php endif; ?>
                                 <input type="hidden" name="from" value="<?= htmlspecialchars($from) ?>">
 
                                 <!-- Pilih Invoice -->
                                 <div class="mb-3">
                                     <label class="form-label">Choose Invoice <span class="text-danger">*</span></label>
-                                    <select name="no_invoice" id="selectInvoice" class="form-select" required <?= $data_edit ? 'disabled' : '' ?>>
+                                    <select name="no_invoice" id="selectInvoice" class="form-select" required>
                                         <option value="">-- Invoice --</option>
                                         <?php foreach ($daftar_invoice as $inv): ?>
                                             <option value="<?= $inv['no_invoice'] ?>"
@@ -176,18 +159,7 @@ function rupiah(int $n): string
                                                 <?= $inv['sisa'] <= 0 ? '(Lunas)' : '' ?>
                                             </option>
                                         <?php endforeach; ?>
-                                        <?php if ($data_edit): ?>
-                                            <option value="<?= $data_edit['no_invoice'] ?>" selected
-                                                data-customer="<?= htmlspecialchars($data_edit['customer']) ?>"
-                                                data-total="<?= $data_edit['total_invoice'] ?>" data-dibayar="0"
-                                                data-sisa="<?= $data_edit['sisa_sebelum'] ?>">
-                                                <?= $data_edit['no_invoice'] ?> — <?= $data_edit['customer'] ?>
-                                            </option>
-                                        <?php endif; ?>
                                     </select>
-                                    <?php if ($data_edit): ?>
-                                        <small class="text-muted">The invoice cannot be modified in edit mode.</small>
-                                    <?php endif; ?>
                                 </div>
 
                                 <!-- Info Invoice -->
@@ -220,7 +192,7 @@ function rupiah(int $n): string
                                     <div class="col-md-6">
                                         <label class="form-label">Date Payment <span class="text-danger">*</span></label>
                                         <input type="date" name="tanggal" class="form-control" required
-                                            value="<?= $data_edit ? $data_edit['tanggal'] : date('Y-m-d') ?>">
+                                            value="<?= date('Y-m-d') ?>">
                                     </div>
 
                                     <!-- Metode -->
@@ -231,7 +203,7 @@ function rupiah(int $n): string
                                             $metode_list = ['Cash', 'Bank Transfer', 'QRIS', 'Debit Card', 'Credit Card'];
                                             foreach ($metode_list as $m):
                                                 ?>
-                                                <option value="<?= $m ?>" <?= ($data_edit && $data_edit['metode'] === $m) ? 'selected' : '' ?>><?= $m ?></option>
+                                                <option value="<?= $m ?>"><?= $m ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -243,7 +215,7 @@ function rupiah(int $n): string
                                             <span class="input-group-text">Rp</span>
                                             <input type="number" name="nominal" id="inputNominal" class="form-control"
                                                 min="1" required placeholder="0"
-                                                value="<?= $data_edit ? $data_edit['nominal'] : '' ?>">
+                                                value="">
                                         </div>
                                         <small class="text-muted">Up to a maximum of the outstanding balance</small>
                                     </div>
@@ -252,15 +224,15 @@ function rupiah(int $n): string
                                     <div class="col-12">
                                         <label class="form-label">Information</label>
                                         <textarea name="keterangan" class="form-control" rows="3"
-                                            placeholder="Additional notes (opsional)"><?= $data_edit ? htmlspecialchars($data_edit['keterangan']) : '' ?></textarea>
+                                            placeholder="Additional notes (opsional)"></textarea>
                                     </div>
                                 </div>
 
                                 <hr class="my-4">
 
                                 <div class="d-flex justify-content-start gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <?= $data_edit ? 'Save' : 'Save' ?>
+                                    <button type="button" class="btn btn-primary" onclick="processPayment()">
+                                        Save
                                     </button>
                                     <a href="<?= htmlspecialchars($backUrl) ?>" class="btn btn-secondary">
                                         Cancel
@@ -335,15 +307,42 @@ function rupiah(int $n): string
         inputNominal.addEventListener('input', updateNominalPreview);
         if (selectInvoice.value) updateInfo();
 
-        // Validasi sederhana: nominal tidak boleh melebihi sisa tagihan
-        document.getElementById('formPembayaran').addEventListener('submit', function (e) {
-            const max = parseInt(inputNominal.max || 0);
-            const val = parseInt(inputNominal.value || 0);
-            if (max > 0 && val > max) {
-                e.preventDefault();
-                alert('The nominal payment cannot exceed the remaining balance (' + rupiahJS(max) + ').');
+        const originalStatus = <?= json_encode($original_status) ?>;
+        const backUrl = <?= json_encode($backUrl) ?>;
+        const invoiceUrl = <?= json_encode($invoiceUrl) ?>;
+
+        function processPayment() {
+            const opt = selectInvoice.options[selectInvoice.selectedIndex];
+            if (!opt || !opt.value) {
+                alert('Choose invoice first.');
+                return;
             }
-        });
+
+            const nominal = parseInt(inputNominal.value || 0);
+            const max = parseInt(inputNominal.max || 0);
+
+            if (!nominal || nominal < 1) {
+                alert('Payment amount must be filled in.');
+                return;
+            }
+            if (max > 0 && nominal > max) {
+                alert('The nominal payment cannot exceed the remaining balance (' + rupiahJS(max) + ').');
+                return;
+            }
+
+            const dibayarNow = baseDibayar + nominal;
+            const newStatus = dibayarNow >= baseTotal ? 'Paid' : originalStatus;
+
+            const params = new URLSearchParams({
+                no_invoice: opt.value,
+                customer: opt.dataset.customer || '',
+                total: baseTotal,
+                dibayar: dibayarNow,
+                status: newStatus
+            });
+
+            window.location.href = invoiceUrl + '?' + params.toString();
+        }
     </script>
 </body>
 

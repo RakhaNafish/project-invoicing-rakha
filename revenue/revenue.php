@@ -13,10 +13,10 @@ $invoices_harian = [
 ];
 
 $data_mingguan = [
-    ['mingguan' => 'Week 1 (January)', 'jumlah_invoice' => 8, 'jumlah_item' => 24, 'omset' => 3850000],
-    ['mingguan' => 'Week 2 (January)', 'jumlah_invoice' => 12, 'jumlah_item' => 35, 'omset' => 5200000],
-    ['mingguan' => 'Week 3 (January)', 'jumlah_invoice' => 7, 'jumlah_item' => 18, 'omset' => 2950000],
-    ['mingguan' => 'Week 4 (January)', 'jumlah_invoice' => 15, 'jumlah_item' => 48, 'omset' => 7800000],
+    ['mingguan' => 'Week 1 (July)', 'jumlah_invoice' => 8, 'jumlah_item' => 24, 'omset' => 3850000],
+    ['mingguan' => 'Week 2 (July)', 'jumlah_invoice' => 12, 'jumlah_item' => 35, 'omset' => 5200000],
+    ['mingguan' => 'Week 3 (July)', 'jumlah_invoice' => 7, 'jumlah_item' => 18, 'omset' => 2950000],
+    ['mingguan' => 'Week 4 (July)', 'jumlah_invoice' => 15, 'jumlah_item' => 48, 'omset' => 7800000],
 ];
 
 $data_bulanan = [
@@ -26,14 +26,6 @@ $data_bulanan = [
     ['tanggal_label' => 'April', 'jumlah_invoice' => 58, 'jumlah_item' => 201, 'omset' => 20700000],
     ['tanggal_label' => 'May', 'jumlah_invoice' => 58, 'jumlah_item' => 201, 'omset' => 20700000],
     ['tanggal_label' => 'June', 'jumlah_invoice' => 67, 'jumlah_item' => 240, 'omset' => 25400000]
-];
-
-$top_produk = [
-    ['nama' => 'Laptop Asus VivoBook', 'terjual' => 42, 'omset' => 31500000, 'pct' => 46],
-    ['nama' => 'Smartphone Samsung', 'terjual' => 35, 'omset' => 14000000, 'pct' => 38],
-    ['nama' => 'Monitor LG 24 Inch', 'terjual' => 28, 'omset' => 5040000, 'pct' => 30],
-    ['nama' => 'Printer Epson L3210', 'terjual' => 21, 'omset' => 4620000, 'pct' => 23],
-    ['nama' => 'Gaming Headset', 'terjual' => 18, 'omset' => 630000, 'pct' => 19],
 ];
 
 function rupiah(int $n): string
@@ -129,7 +121,7 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
                                                 <th class="sortable" data-col="0">Day</th>
                                                 <th class="sortable text-center" data-col="1">Total Invoice </th>
                                                 <th class="sortable text-center" data-col="2">Total Item</th>
-                                                <th class="sortable text-end" data-col="3">Total Amount</th>
+                                                <th class="sortable text-end" data-col="3">Total Revenue</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -154,7 +146,7 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
                                                 <th class="sortable" data-col="0">Week</th>
                                                 <th class="sortable text-center" data-col="1">Total Invoices</th>
                                                 <th class="sortable text-center" data-col="2">Total Items</th>
-                                                <th class="sortable text-end" data-col="3">Revenue</th>
+                                                <th class="sortable text-end" data-col="3">Total Revenue</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -179,7 +171,7 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
                                                 <th class="sortable" data-col="0">Month</th>
                                                 <th class="sortable text-center" data-col="1">Total Invoices</th>
                                                 <th class="sortable text-center" data-col="2">Total Items</th>
-                                                <th class="sortable text-end" data-col="3">Revenue</th>
+                                                <th class="sortable text-end" data-col="3">Total Revenue</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -252,31 +244,6 @@ $totalPage = ceil(count($invoices_harian) / $perPage);
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="card mt-4">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h6 class="card-title mb-0">Top 5 Best-Selling Products</h6>
-                        </div>
-                        <div class="card-body py-2">
-                            <?php foreach ($top_produk as $i => $p): ?>
-                                <div class="top-product-row">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="small fw-semibold"><?= $p['nama'] ?></span>
-                                        </div>
-                                        <span class="small text-muted"><?= $p['terjual'] ?> sold</span>
-                                    </div>
-                                    <div class="progress" style="height:5px">
-                                        <div class="progress-bar progress-bar-anim bg-<?= ['warning', 'primary', 'success', 'info', 'danger'][$i] ?>"
-                                            style="width:<?= $p['pct'] ?>%"></div>
-                                    </div>
-                                    <div class="text-end mt-1">
-                                        <small class="text-muted"><?= rupiah($p['omset']) ?></small>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
                     </div>
 
                 </div>

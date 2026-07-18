@@ -1,12 +1,12 @@
 <?php
 
 // ============================
-// DUMMY DATA - Report Tunggakan Customer
+// DUMMY DATA - Outstanding Balance Customer
 // ============================
 
 $keyword_filter = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 
-$tunggakan = [
+$outstanding = [
     ['invoice_no' => 'INV-001', 'customer' => 'Dewi Lestari', 'tanggal_invoice' => '2026-05-02', 'jatuh_tempo' => '2026-06-01', 'total_invoice' => 2100000, 'total_terbayar' => 1200000,],
     ['invoice_no' => 'INV-002', 'customer' => 'Rina Kusuma', 'tanggal_invoice' => '2026-05-10', 'jatuh_tempo' => '2026-06-09', 'total_invoice' => 950000, 'total_terbayar' => 650000,],
     ['invoice_no' => 'INV-003', 'customer' => 'Teguh Wibowo', 'tanggal_invoice' => '2026-04-18', 'jatuh_tempo' => '2026-05-18', 'total_invoice' => 4300000, 'total_terbayar' => 2900000,],
@@ -15,29 +15,25 @@ $tunggakan = [
     ['invoice_no' => 'INV-006', 'customer' => 'Nurul Hidayah', 'tanggal_invoice' => '2026-05-25', 'jatuh_tempo' => '2026-06-24', 'total_invoice' => 1500000, 'total_terbayar' => 750000,],
     ['invoice_no' => 'INV-007', 'customer' => 'Doni Setiawan', 'tanggal_invoice' => '2026-04-30', 'jatuh_tempo' => '2026-05-30', 'total_invoice' => 3000000, 'total_terbayar' => 1500000,],
     ['invoice_no' => 'INV-008', 'customer' => 'Laila Sari', 'tanggal_invoice' => '2026-06-10', 'jatuh_tempo' => '2026-07-10', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-009', 'customer' => 'Tes', 'tanggal_invoice' => '2026-05-15', 'jatuh_tempo' => '2026-06-14', 'total_invoice' => 1800000, 'total_terbayar' => 600000,],
-    ['invoice_no' => 'INV-010', 'customer' => 'Pria Kehidupan', 'tanggal_invoice' => '2026-05-16', 'jatuh_tempo' => '2026-06-15', 'total_invoice' => 1800000, 'total_terbayar' => 600000,],
-    ['invoice_no' => 'INV-011', 'customer' => 'Bocil Kematian', 'tanggal_invoice' => '2026-05-17', 'jatuh_tempo' => '2026-06-16', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-012', 'customer' => 'Ujang Ronda', 'tanggal_invoice' => '2026-05-18', 'jatuh_tempo' => '2026-06-17', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-013', 'customer' => 'Jesko Prikitiw', 'tanggal_invoice' => '2026-05-19', 'jatuh_tempo' => '2026-06-18', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-015', 'customer' => 'Zidan Cihuy', 'tanggal_invoice' => '2026-05-20', 'jatuh_tempo' => '2026-06-19', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-016', 'customer' => 'Gua Keren', 'tanggal_invoice' => '2026-05-21', 'jatuh_tempo' => '2026-06-20', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-017', 'customer' => 'Bawakdehekwak', 'tanggal_invoice' => '2026-05-22', 'jatuh_tempo' => '2026-06-21', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-018', 'customer' => 'Gokgokgok', 'tanggal_invoice' => '2026-05-23', 'jatuh_tempo' => '2026-06-22', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
-    ['invoice_no' => 'INV-019', 'customer' => 'Cihuyyyy', 'tanggal_invoice' => '2026-05-24', 'jatuh_tempo' => '2026-06-23', 'total_invoice' => 1800000, 'total_terbayar' => 450000,],
+    ['invoice_no' => 'INV-020', 'customer' => 'Budi Santoso', 'tanggal_invoice' => '2026-05-01', 'jatuh_tempo' => '2026-05-31', 'total_invoice' => 3850000, 'total_terbayar' => 3850000,],
+    ['invoice_no' => 'INV-021', 'customer' => 'Rizky Pratama', 'tanggal_invoice' => '2026-05-03', 'jatuh_tempo' => '2026-06-02', 'total_invoice' => 2100000, 'total_terbayar' => 2100000,],
 ];
 
 // Hitung sisa tagihan + status (Overdue jika lewat jatuh tempo, selain itu Pending)
-foreach ($tunggakan as &$t) {
-    $t['sisa_tagihan'] = $t['total_invoice'] - $t['total_terbayar'];
-    $t['status'] = strtotime($t['jatuh_tempo']) < strtotime('today') ? 'Overdue' : 'Pending';
+foreach ($outstanding as &$o) {
+    $o['sisa_tagihan'] = $o['total_invoice'] - $o['total_terbayar'];
+    $o['status'] = strtotime($o['jatuh_tempo']) < strtotime('today') ? 'Overdue' : 'Pending';
 }
-unset($t);
+unset($o);
+
+// Filter → hanya yang belum lunas
+$outstanding = array_values(array_filter($outstanding, fn($o) => $o['sisa_tagihan'] > 0));
 
 // Urutkan dari sisa tagihan terbesar
-usort($tunggakan, fn($a, $b) => $b['sisa_tagihan'] <=> $a['sisa_tagihan']);
+usort($outstanding, fn($a, $b) => $b['sisa_tagihan'] <=> $a['sisa_tagihan']);
 
-$jumlah_customer_nunggak = count(array_filter($tunggakan, fn($t) => $t['sisa_tagihan'] > 0));
+$jumlah_customer_outstanding = count($outstanding);
+$total_outstanding = array_sum(array_column($outstanding, 'sisa_tagihan'));
 
 function rupiah(int $n): string
 {
@@ -56,7 +52,7 @@ function formatTanggal(string $tgl): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overdue Balance</title>
+    <title>Outstanding Balance</title>
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -82,10 +78,6 @@ function formatTanggal(string $tgl): string
             margin-bottom: 16px;
         }
 
-        .progress {
-            height: 6px;
-        }
-
         .sort-icon {
             font-size: .75rem;
             margin-left: 4px;
@@ -98,7 +90,7 @@ function formatTanggal(string $tgl): string
 
         <?php include "../component/header.php"; ?>
         <?php
-        $activePage = 'arrears';
+        $activePage = 'outstanding';
         include "../component/sidebar.php";
         ?>
 
@@ -110,13 +102,13 @@ function formatTanggal(string $tgl): string
                     <div class="container-fluid">
                         <div class="row align-items-center">
                             <div class="col-sm-6">
-                                <h3>Customer Overdue Report</h3>
+                                <h3>Customer Outstanding Balance</h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">
                                     <li class="breadcrumb-item"><a href="dashboard.php"
                                             class="text-decoration-none">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Overdue</li>
+                                    <li class="breadcrumb-item active">Outstanding</li>
                                 </ol>
                             </div>
                         </div>
@@ -124,21 +116,10 @@ function formatTanggal(string $tgl): string
                 </div>
 
                 <div class="container-fluid">
+
                     <!-- Filter -->
-                    <div class="card">
+                    <div class="card table-card">
                         <div class="card-header">
-
-                            <!-- Baris Atas -->
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <!-- <div class="input-group input-group-sm" style="width:280px;">
-                                    <span class="input-group-text">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <input type="text" id="globalSearch" class="form-control" placeholder="Search">
-                                </div> -->
-
-                            </div>
 
                             <!-- Baris Filter -->
                             <div class="row g-2 align-items-end">
@@ -148,15 +129,6 @@ function formatTanggal(string $tgl): string
                                     <input type="text" id="customerSearch" class="form-control form-control-sm"
                                         placeholder="Customer...">
                                 </div>
-
-                                <!-- <div class="col-md-5">
-                                    <label class="form-label">Status</label>
-                                    <select id="statusFilter" class="form-select form-select-sm">
-                                        <option value="">All</option>
-                                        <option value="tunggakan">Outstanding balances only</option>
-                                        <option value="lunas">Already paid</option>
-                                    </select>
-                                </div> -->
 
                                 <div class="col-md-3 ms-auto">
                                     <button type="button" id="resetFilterBtn" class="btn btn-secondary btn-sm w-100">
@@ -169,15 +141,15 @@ function formatTanggal(string $tgl): string
 
                         </div>
 
-                        <?php if (count($tunggakan) > 0): ?>
+                        <?php if (count($outstanding) > 0): ?>
 
-                            <!-- Tabel Tunggakan -->
+                            <!-- Tabel Outstanding -->
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="card-title mb-0">Overdue Details by Customer</h5>
+                                <h5 class="card-title mb-0">Outstanding Details by Customer</h5>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-hover align-middle" id="tabelTunggakan">
+                                    <table class="table table-striped table-hover align-middle" id="tabelOutstanding">
                                         <thead>
                                             <tr>
                                                 <th data-col="0">Inv No.</th>
@@ -186,52 +158,42 @@ function formatTanggal(string $tgl): string
                                                 <th class="sortable" data-col="3">Due Date <i class="bi sort-icon"></i></th>
                                                 <th class="sortable text-end" data-col="4">Total Invoice <i class="bi sort-icon"></i></th>
                                                 <th class="sortable text-end" data-col="5">Total Paid Off <i class="bi sort-icon"></i></th>
-                                                <th class="sortable text-end" data-col="6">Rest of the bill <i class="bi sort-icon"></i></th>
+                                                <th class="sortable text-end" data-col="6">Outstanding <i class="bi sort-icon"></i></th>
                                                 <th class="text-center" data-col="7">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($tunggakan as $t):
-                                                $pct = $t['total_invoice'] > 0
-                                                    ? round(($t['total_terbayar'] / $t['total_invoice']) * 100)
-                                                    : 0;
-                                                $lunas = $t['sisa_tagihan'] <= 0;
-                                                $rowStatus = $lunas ? 'Paid' : $t['status'];
-                                                ?>
-                                                <tr data-status="<?= $lunas ? 'lunas' : 'tunggakan' ?>">
-                                                    <td class="fw-semibold"><?= htmlspecialchars($t['invoice_no']) ?></td>
-                                                    <td class="fw-semibold"><?= htmlspecialchars($t['customer']) ?></td>
-                                                    <td data-sort="<?= strtotime($t['tanggal_invoice']) ?>">
-                                                        <?= formatTanggal($t['tanggal_invoice']) ?>
+                                            <?php foreach ($outstanding as $o): ?>
+                                                <tr>
+                                                    <td class="fw-semibold"><?= htmlspecialchars($o['invoice_no']) ?></td>
+                                                    <td class="fw-semibold"><?= htmlspecialchars($o['customer']) ?></td>
+                                                    <td data-sort="<?= strtotime($o['tanggal_invoice']) ?>">
+                                                        <?= formatTanggal($o['tanggal_invoice']) ?>
                                                     </td>
-                                                    <td data-sort="<?= strtotime($t['jatuh_tempo']) ?>">
-                                                        <?= formatTanggal($t['jatuh_tempo']) ?>
+                                                    <td data-sort="<?= strtotime($o['jatuh_tempo']) ?>">
+                                                        <?= formatTanggal($o['jatuh_tempo']) ?>
                                                     </td>
-                                                    <td class="text-end" data-sort="<?= $t['total_invoice'] ?>">
-                                                        <?= rupiah($t['total_invoice']) ?>
+                                                    <td class="text-end" data-sort="<?= $o['total_invoice'] ?>">
+                                                        <?= rupiah($o['total_invoice']) ?>
                                                     </td>
-                                                    <td class="text-end text-success" data-sort="<?= $t['total_terbayar'] ?>">
-                                                        <?= rupiah($t['total_terbayar']) ?>
+                                                    <td class="text-end text-success" data-sort="<?= $o['total_terbayar'] ?>">
+                                                        <?= rupiah($o['total_terbayar']) ?>
                                                     </td>
-                                                    <td class="text-end fw-semibold <?= $lunas ? '' : 'text-danger' ?>"
-                                                        data-sort="<?= $t['sisa_tagihan'] ?>">
-                                                        <?= rupiah($t['sisa_tagihan']) ?>
+                                                    <td class="text-end fw-semibold text-danger"
+                                                        data-sort="<?= $o['sisa_tagihan'] ?>">
+                                                        <?= rupiah($o['sisa_tagihan']) ?>
                                                     </td>
                                                     <td class="text-center">
-                                                        <?php if ($lunas): ?>
-                                                            <button type="button" class="btn btn-secondary btn-sm" disabled>Paid Off</button>
-                                                        <?php else: ?>
-                                                            <a href="pembayaran.php?<?= http_build_query([
-                                                                'from' => 'arrears',
-                                                                'no_invoice' => $t['invoice_no'],
-                                                                'customer' => $t['customer'],
-                                                                'total' => $t['total_invoice'],
-                                                                'dibayar' => $t['total_terbayar'],
-                                                                'status' => $rowStatus,
-                                                            ]) ?>" class="btn btn-primary btn-sm">
-                                                                Pay
-                                                            </a>
-                                                        <?php endif; ?>
+                                                        <a href="pembayaran.php?<?= http_build_query([
+                                                            'from' => 'outstanding',
+                                                            'no_invoice' => $o['invoice_no'],
+                                                            'customer' => $o['customer'],
+                                                            'total' => $o['total_invoice'],
+                                                            'dibayar' => $o['total_terbayar'],
+                                                            'status' => $o['status'],
+                                                        ]) ?>" class="btn btn-primary btn-sm">
+                                                            Pay
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -243,31 +205,27 @@ function formatTanggal(string $tgl): string
                                     <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
                                 </div>
                             </div>
-                        </div>
+
+                        <?php else: ?>
+                            <div class="card-body empty-state">
+                                <i class="bi bi-inbox d-block"></i>
+                                <p class="mb-0">No customer with outstanding balance.</p>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
-                <?php else: ?>
-                    <div class="card">
-                        <div class="card-body empty-state">
-                            <i class="bi bi-inbox d-block"></i>
-                            <p class="mb-0">Tidak ada data customer yang cocok dengan pencarian.</p>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                </div>
 
             </div>
         </div>
         <?php include "../component/footer.php"; ?>
-    </div>
-    </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
         (function () {
-            const table = document.getElementById('tabelTunggakan');
+            const table = document.getElementById('tabelOutstanding');
             if (!table) return;
             const tbody = table.querySelector('tbody');
             const allRows = Array.from(tbody.querySelectorAll('tr'));
@@ -279,7 +237,7 @@ function formatTanggal(string $tgl): string
             let sortCol = -1, sortAsc = true, currentPage = 1;
 
             function filterRows() {
-
+                
                 const customerKeyword = customerSearch.value.toLowerCase();
 
                 return allRows.filter(row => {

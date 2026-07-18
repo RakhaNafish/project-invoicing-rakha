@@ -31,7 +31,7 @@
                                         <a href="../dashboard/dashboard.php" class="text-decoration-none">Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="table.Invoice.php" class="text-decoration-none">Invoice</a>
+                                        <a href="table.Invoice.php" class="text-decoration-none">Data Invoice</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         <a>Add Invoice</a>
@@ -59,8 +59,25 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="Insert Customer Name">
+                                        <label>Customer Name</label>
+                                        <select class="form-select">
+                                            <option>-- Select Customer --</option>
+                                            <option>Andi Pratama</option>
+                                            <option>Budi Santoso</option>
+                                            <option>Dewi Lestari</option>
+                                            <option>Eko Saputra</option>
+                                            <option>Farhan Akbar</option>
+                                            <option>Gita Permata</option>
+                                            <option>Hendra Wijaya</option>
+                                            <option>Indah Sari</option>
+                                            <option>Joko Susilo</option>
+                                            <option>Kartika Putri</option>
+                                            <option>Lukman Hakim</option>
+                                            <option>Maya Sari</option>
+                                            <option>Nanda Putra</option>
+                                            <option>Olivia Putri</option>
+                                            <option>Putra Nugraha</option>
+                                        </select>
                                     </div>
 
                                     <div class="form-group">
@@ -73,14 +90,6 @@
                                         <input type="date" class="form-control" placeholder="Insert Due_Date">
                                     </div>
 
-                                    <!-- <div class="form-group">
-                                        <label>Status</label>
-                                        <select class="form-control">
-                                            <option>Paid</option>
-                                            <option>Unpaid</option>
-                                            <option>Pending</option>
-                                        </select>
-                                    </div> -->
 
                                 </form>
                             </div>

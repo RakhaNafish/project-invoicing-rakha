@@ -13,9 +13,9 @@ $month_full = [1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 =>
 // ── 1. KPI SUMMARY (max 4 cards) ─────────────────────────────
 $total_revenue = 543000000;
 $total_revenue_prev = 498000000;
-$total_unpaid = 18400000;
+$total_unpaid = 384000000;
 $total_unpaid_prev = 15200000;
-$total_overdue = 6600000;
+$total_overdue = 260000000;
 $total_overdue_prev = 8100000;
 $total_invoice = 195;
 $total_invoice_prev = 210;
@@ -359,7 +359,7 @@ function format_date_id(string $date): string
                                     <?php endforeach; ?>
                                 </div>
                                 <div class="text-center border-top py-2">
-                                    <a href="../revenue/revenue.php"
+                                    <a href="../revenue/topselling.php"
                                         class="btn btn-sm btn-link text-decoration-none">View
                                         Detail Top Selling
                                         <i class="bi bi-arrow-right ms-1"></i></a>

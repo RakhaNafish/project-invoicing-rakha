@@ -60,8 +60,25 @@ $backUrl = $from === 'table' ? 'table.invoice.php' : 'invoice.php';
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="Insert Customer Name">
+                                        <label>Customer Name</label>
+                                        <select class="form-select">
+                                            <option>-- Select Customer --</option>
+                                            <option selected>Andi Pratama</option>
+                                            <option>Budi Santoso</option>
+                                            <option>Dewi Lestari</option>
+                                            <option>Eko Saputra</option>
+                                            <option>Farhan Akbar</option>
+                                            <option>Gita Permata</option>
+                                            <option>Hendra Wijaya</option>
+                                            <option>Indah Sari</option>
+                                            <option>Joko Susilo</option>
+                                            <option>Kartika Putri</option>
+                                            <option>Lukman Hakim</option>
+                                            <option>Maya Sari</option>
+                                            <option>Nanda Putra</option>
+                                            <option>Olivia Putri</option>
+                                            <option>Putra Nugraha</option>
+                                        </select>
                                     </div>
 
                                     <div class="form-group">

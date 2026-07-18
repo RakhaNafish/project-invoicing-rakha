@@ -195,12 +195,12 @@ function rupiah(int $n): string
                                                                 Action
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                                <li>
+                                                                <!-- <li>
                                                                     <a class="dropdown-item text-warning"
                                                                         href="pembayaran.php?id=<?= $p['id'] ?>">
                                                                         <i class="bi bi-pencil-square me-1"></i> Edit
                                                                     </a>
-                                                                </li>
+                                                                </li> -->
                                                                 <li>
                                                                     <button type="button" class="dropdown-item text-danger"
                                                                         data-bs-toggle="modal" data-bs-target="#deleteModal"

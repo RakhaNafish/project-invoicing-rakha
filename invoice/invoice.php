@@ -34,11 +34,27 @@ $katalog = [
   ["id" => 30, "name" => "Mini PC", "price" => 4800000],
 ];
 
+// Data dari URL (dikirim table_invoice.php / pembayaran.php)
+$no_invoice = $_GET['no_invoice'] ?? 'INV-001';
+$customer_name = $_GET['customer'] ?? 'Azura Mishimoto';
+$pic_name = $_GET['pic'] ?? 'Ahmad Fauzi';
+$status = $_GET['status'] ?? 'Pending';
+
+$badgeMap = ['Paid' => 'success', 'Pending' => 'warning', 'Overdue' => 'danger'];
+$statusBadge = $badgeMap[$status] ?? 'secondary';
+
 // Item yang ada di invoice ini
-$invoiceItems = [
-  ['name' => 'Laptop Asus VivoBook', 'qty' => 1, 'price' => 7500000],
-  ['name' => 'Mouse Logitech Wireless', 'qty' => 2, 'price' => 150000],
-];
+if (isset($_GET['total']) && (int) $_GET['total'] > 0) {
+  // Datang dari table_invoice / arrears / outstanding / pembayaran → pakai total kiriman
+  $invoiceItems = [
+    ['name' => 'Invoice Amount', 'qty' => 1, 'price' => (int) $_GET['total']],
+  ];
+} else {
+  $invoiceItems = [
+    ['name' => 'Laptop Asus VivoBook', 'qty' => 1, 'price' => 7500000],
+    ['name' => 'Mouse Logitech Wireless', 'qty' => 2, 'price' => 150000],
+  ];
+}
 
 $total = 0;
 foreach ($invoiceItems as $item) {
@@ -99,7 +115,7 @@ foreach ($invoiceItems as $item) {
   </style>
 </head>
 
-<body class="layout-fixed sidebar-expand-lg bg-body-tertiary sidebar-collapse reduce-motion app-loaded">
+<body class="layout-fixed fixed-header sidebar-expand-lg bg-body-tertiary sidebar-collapse reduce-motion app-loaded">
   <div class="app-wrapper">
 
     <?php include "../component/header.php"; ?>
@@ -144,12 +160,16 @@ foreach ($invoiceItems as $item) {
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="#"><i class="bi bi-send me-1"></i> Send Invoice</a></li>
-                <li><a class="dropdown-item"
-                    href="../dashboard/pembayaran.php?no_invoice=INV-001&customer=<?= urlencode('Azura Mishimoto') ?>&total=<?= $total ?>&from=invoice"><i
-                      class="bi bi-cash-coin"></i> Pay Now</a></li>
-                <li><a class="dropdown-item"
-                    href="kwitansi.php?no_invoice=INV-001&customer=<?= urlencode('Azura Mishimoto') ?>&total=<?= $total ?>"><i
-                      class="bi bi-receipt"></i> Receipt</a></li>
+                <?php if ($status !== 'Paid'): ?>
+                  <li><a class="dropdown-item" id="payNowLink"
+                      href="../dashboard/pembayaran.php?no_invoice=<?= urlencode($no_invoice) ?>&customer=<?= urlencode($customer_name) ?>&total=<?= $total ?>&status=<?= urlencode($status) ?>&from=invoice"><i
+                        class="bi bi-cash-coin"></i> Pay Now</a></li>
+                <?php endif; ?>
+                <?php if ($status === 'Paid'): ?>
+                  <li><a class="dropdown-item" id="receiptLink"
+                      href="kwitansi.php?no_invoice=<?= urlencode($no_invoice) ?>&customer=<?= urlencode($customer_name) ?>&total=<?= $total ?>&status=<?= urlencode($status) ?>"><i
+                        class="bi bi-receipt"></i> Receipt</a></li>
+                <?php endif; ?>
               </ul>
             </div>
           </div>
@@ -168,8 +188,8 @@ foreach ($invoiceItems as $item) {
                 </div>
                 <div class="col-sm-6 text-sm-end">
                   <h1 class="h2 mb-1">Invoice</h1>
-                  <p class="text-secondary mb-0"><span class="fw-semibold">#</span>INV-001</p>
-                  <span class="badge text-bg-warning mt-1">Pending</span>
+                  <p class="text-secondary mb-0"><span class="fw-semibold">#</span><?= htmlspecialchars($no_invoice) ?></p>
+                  <span class="badge text-bg-<?= $statusBadge ?> mt-1" id="statusBadge"><?= htmlspecialchars($status) ?></span>
                 </div>
               </div>
 
@@ -177,9 +197,9 @@ foreach ($invoiceItems as $item) {
               <div class="row mb-4">
                 <div class="col-sm-6">
                   <p class="text-secondary small mb-0">Billed to</p>
-                  <p class="mb-3 fw-semibold">Ahmad Fauzi</p>
+                  <p class="mb-3 fw-semibold"><?= htmlspecialchars($customer_name) ?></p>
                   <p class="text-secondary small mb-0">Person in Charge</p>
-                  <p class="mb-0">Azura Mishimoto</p>
+                  <p class="mb-0"><?= htmlspecialchars($pic_name) ?></p>
                 </div>
                 <div class="col-sm-6 text-sm-end">
                   <p class="text-secondary small mb-1">Issue date</p>
@@ -439,6 +459,8 @@ foreach ($invoiceItems as $item) {
   <script src="../dist/js/adminlte.min.js"></script>
   <script>
     // ── State ──────────────────────────────────────────────────────────────
+    const noInvoice = <?= json_encode($no_invoice) ?>;
+    const customerName = <?= json_encode($customer_name) ?>;
     let invoiceItems = <?= json_encode(array_values($invoiceItems)) ?>;
 
     // katalog dari PHP → JS (untuk lookup nama+harga saat render)
@@ -488,11 +510,18 @@ foreach ($invoiceItems as $item) {
       const fmt = formatRp(total);
       document.getElementById('subtotalDisplay').textContent = fmt;
       document.getElementById('totalDisplay').textContent = fmt;
+
+      const payLink = document.getElementById('payNowLink');
+      if (payLink) {
+        const url = new URL(payLink.href, window.location.origin);
+        url.searchParams.set('total', total);
+        payLink.href = url.toString();
+      }
     }
 
     // ── PDF ────────────────────────────────────────────────────────────────
     function buatPDF() {
-      window.location.href = 'invoice-pdf.php?no_invoice=INV-001&customer=' + encodeURIComponent('Azura Mishimoto');
+      window.location.href = 'invoice-pdf.php?no_invoice=' + encodeURIComponent(noInvoice) + '&customer=' + encodeURIComponent(customerName);
     }
 
     // ── ADD ────────────────────────────────────────────────────────────────

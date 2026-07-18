@@ -50,7 +50,7 @@ $pics = [
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h3>Data PIC</h3>
+                                <h3>Data PIC (Person In Charge)</h3>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-end">

@@ -3,6 +3,13 @@
 // Dummy data — sambungin DB nanti
 $no_invoice = $_GET['no_invoice'] ?? 'INV-001';
 $customer = $_GET['customer'] ?? 'Azura Mishimoto';
+$status = $_GET['status'] ?? 'Pending';
+
+// Kwitansi hanya untuk invoice yang sudah Paid
+if ($status !== 'Paid') {
+    header('Location: invoice.php?no_invoice=' . urlencode($no_invoice) . '&customer=' . urlencode($customer) . '&status=' . urlencode($status));
+    exit;
+}
 
 $invoiceItems = [
   ['name' => 'Laptop Asus VivoBook', 'qty' => 1, 'price' => 7500000],
@@ -146,8 +153,8 @@ $no_kwitansi = 'KW-' . date('Ym') . '-' . str_pad((string) rand(1, 999), 3, '0',
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="../dashboard/dashboard.php"
                       class="text-decoration-none">Dashboard</a></li>
-                  <li class="breadcrumb-item"><a href="table.invoice.php" class="text-decoration-none">Invoice</a></li>
-                  <li class="breadcrumb-item"><a href="invoice.php" class="text-decoration-none">See Invoice</a></li>
+                  <li class="breadcrumb-item"><a href="table.invoice.php" class="text-decoration-none">Data Invoice</a></li>
+                  <li class="breadcrumb-item"><a href="invoice.php" class="text-decoration-none">Invoice</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Receipt</li>
                 </ol>
               </div>

@@ -1,38 +1,38 @@
 <?php
 
 $invoice = [
-    ['id' => 1, 'invoice_no' => 'INV-001', 'customer_name' => 'Andi Pratama', 'invoice_date' => '01-06-2026', 'due_date' => '15-06-2026', 'amount' => 1500000, 'status' => 'Paid'],
-    ['id' => 2, 'invoice_no' => 'INV-002', 'customer_name' => 'Budi Santoso', 'invoice_date' => '02-06-2026', 'due_date' => '16-06-2026', 'amount' => 2750000, 'status' => 'Unpaid'],
-    ['id' => 3, 'invoice_no' => 'INV-003', 'customer_name' => 'Citra Lestari', 'invoice_date' => '03-06-2026', 'due_date' => '17-06-2026', 'amount' => 3250000, 'status' => 'Pending'],
-    ['id' => 4, 'invoice_no' => 'INV-004', 'customer_name' => 'Dewi Anggraini', 'invoice_date' => '04-06-2026', 'due_date' => '18-06-2026', 'amount' => 1850000, 'status' => 'Paid'],
-    ['id' => 5, 'invoice_no' => 'INV-005', 'customer_name' => 'Eko Saputra', 'invoice_date' => '05-06-2026', 'due_date' => '19-06-2026', 'amount' => 4200000, 'status' => 'Unpaid'],
-    ['id' => 6, 'invoice_no' => 'INV-006', 'customer_name' => 'Farhan Akbar', 'invoice_date' => '06-06-2026', 'due_date' => '20-06-2026', 'amount' => 5600000, 'status' => 'Pending'],
-    ['id' => 7, 'invoice_no' => 'INV-007', 'customer_name' => 'Gilang Ramadhan', 'invoice_date' => '07-06-2026', 'due_date' => '21-06-2026', 'amount' => 2400000, 'status' => 'Paid'],
-    ['id' => 8, 'invoice_no' => 'INV-008', 'customer_name' => 'Hendra Wijaya', 'invoice_date' => '08-06-2026', 'due_date' => '22-06-2026', 'amount' => 1750000, 'status' => 'Unpaid'],
-    ['id' => 9, 'invoice_no' => 'INV-009', 'customer_name' => 'Indra Kurniawan', 'invoice_date' => '09-06-2026', 'due_date' => '23-06-2026', 'amount' => 3900000, 'status' => 'Paid'],
-    ['id' => 10, 'invoice_no' => 'INV-010', 'customer_name' => 'Joko Susilo', 'invoice_date' => '10-06-2026', 'due_date' => '24-06-2026', 'amount' => 2800000, 'status' => 'Pending'],
+    ['id' => 1, 'invoice_no' => 'INV-001', 'customer_name' => 'Andi Pratama', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '01-06-2026', 'due_date' => '15-06-2026', 'amount' => 1500000, 'status' => 'Paid'],
+    ['id' => 2, 'invoice_no' => 'INV-002', 'customer_name' => 'Budi Santoso', 'pic' => 'Zidan Rasyid', 'invoice_date' => '02-06-2026', 'due_date' => '16-06-2026', 'amount' => 2750000, 'status' => 'Overdue'],
+    ['id' => 3, 'invoice_no' => 'INV-003', 'customer_name' => 'Citra Lestari', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '03-06-2026', 'due_date' => '17-06-2026', 'amount' => 3250000, 'status' => 'Pending'],
+    ['id' => 4, 'invoice_no' => 'INV-004', 'customer_name' => 'Dewi Anggraini', 'pic' => 'Zidan Rasyid', 'invoice_date' => '04-06-2026', 'due_date' => '18-06-2026', 'amount' => 1850000, 'status' => 'Paid'],
+    ['id' => 5, 'invoice_no' => 'INV-005', 'customer_name' => 'Eko Saputra', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '05-06-2026', 'due_date' => '19-06-2026', 'amount' => 4200000, 'status' => 'Overdue'],
+    ['id' => 6, 'invoice_no' => 'INV-006', 'customer_name' => 'Farhan Akbar', 'pic' => 'Dzaki Prasetyo', 'invoice_date' => '06-06-2026', 'due_date' => '20-06-2026', 'amount' => 5600000, 'status' => 'Pending'],
+    ['id' => 7, 'invoice_no' => 'INV-007', 'customer_name' => 'Gilang Ramadhan', 'pic' => 'Zidan Rasyid', 'invoice_date' => '07-06-2026', 'due_date' => '21-06-2026', 'amount' => 2400000, 'status' => 'Paid'],
+    ['id' => 8, 'invoice_no' => 'INV-008', 'customer_name' => 'Hendra Wijaya', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '08-06-2026', 'due_date' => '22-06-2026', 'amount' => 1750000, 'status' => 'Overdue'],
+    ['id' => 9, 'invoice_no' => 'INV-009', 'customer_name' => 'Indra Kurniawan', 'pic' => 'Zidan Rasyid', 'invoice_date' => '09-06-2026', 'due_date' => '23-06-2026', 'amount' => 3900000, 'status' => 'Paid'],
+    ['id' => 10, 'invoice_no' => 'INV-010', 'customer_name' => 'Joko Susilo', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '10-06-2026', 'due_date' => '24-06-2026', 'amount' => 2800000, 'status' => 'Pending'],
 
-    ['id' => 11, 'invoice_no' => 'INV-011', 'customer_name' => 'Kevin Setiawan', 'invoice_date' => '11-06-2026', 'due_date' => '25-06-2026', 'amount' => 5100000, 'status' => 'Paid'],
-    ['id' => 12, 'invoice_no' => 'INV-012', 'customer_name' => 'Lukman Hakim', 'invoice_date' => '12-06-2026', 'due_date' => '26-06-2026', 'amount' => 1950000, 'status' => 'Unpaid'],
-    ['id' => 13, 'invoice_no' => 'INV-013', 'customer_name' => 'Maya Sari', 'invoice_date' => '13-06-2026', 'due_date' => '27-06-2026', 'amount' => 6700000, 'status' => 'Paid'],
-    ['id' => 14, 'invoice_no' => 'INV-014', 'customer_name' => 'Nanda Putri', 'invoice_date' => '14-06-2026', 'due_date' => '28-06-2026', 'amount' => 2200000, 'status' => 'Pending'],
-    ['id' => 15, 'invoice_no' => 'INV-015', 'customer_name' => 'Oki Prasetyo', 'invoice_date' => '15-06-2026', 'due_date' => '29-06-2026', 'amount' => 3450000, 'status' => 'Paid'],
-    ['id' => 16, 'invoice_no' => 'INV-016', 'customer_name' => 'Putri Ayu', 'invoice_date' => '16-06-2026', '   ue_date' => '30-06-2026', 'amount' => 2900000, 'status' => 'Unpaid'],
-    ['id' => 17, 'invoice_no' => 'INV-017', 'customer_name' => 'Qori Ahmad', 'invoice_date' => '17-06-2026', 'due_date' => '01-07-2026', 'amount' => 4800000, 'status' => 'Paid'],
-    ['id' => 18, 'invoice_no' => 'INV-018', 'customer_name' => 'Rina Marlina', 'invoice_date' => '18-06-2026', 'due_date' => '02-07-2026', 'amount' => 2600000, 'status' => 'Pending'],
-    ['id' => 19, 'invoice_no' => 'INV-019', 'customer_name' => 'Siti Rahma', 'invoice_date' => '19-06-2026', 'due_date' => '03-07-2026', 'amount' => 7200000, 'status' => 'Paid'],
-    ['id' => 20, 'invoice_no' => 'INV-020', 'customer_name' => 'Teguh Firmansyah', 'invoice_date' => '20-06-2026', 'due_date' => '04-07-2026', 'amount' => 1850000, 'status' => 'Unpaid'],
+    ['id' => 11, 'invoice_no' => 'INV-011', 'customer_name' => 'Kevin Setiawan', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '11-06-2026', 'due_date' => '25-06-2026', 'amount' => 5100000, 'status' => 'Paid'],
+    ['id' => 12, 'invoice_no' => 'INV-012', 'customer_name' => 'Lukman Hakim', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '12-06-2026', 'due_date' => '26-06-2026', 'amount' => 1950000, 'status' => 'Overdue'],
+    ['id' => 13, 'invoice_no' => 'INV-013', 'customer_name' => 'Maya Sari', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '13-06-2026', 'due_date' => '27-06-2026', 'amount' => 6700000, 'status' => 'Paid'],
+    ['id' => 14, 'invoice_no' => 'INV-014', 'customer_name' => 'Nanda Putri', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '14-06-2026', 'due_date' => '28-06-2026', 'amount' => 2200000, 'status' => 'Pending'],
+    ['id' => 15, 'invoice_no' => 'INV-015', 'customer_name' => 'Oki Prasetyo', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '15-06-2026', 'due_date' => '29-06-2026', 'amount' => 3450000, 'status' => 'Paid'],
+    ['id' => 16, 'invoice_no' => 'INV-016', 'customer_name' => 'Putri Ayu', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '16-06-2026', 'due_date' => '30-06-2026', 'amount' => 2900000, 'status' => 'Overdue'],
+    ['id' => 17, 'invoice_no' => 'INV-017', 'customer_name' => 'Qori Ahmad', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '17-06-2026', 'due_date' => '01-07-2026', 'amount' => 4800000, 'status' => 'Paid'],
+    ['id' => 18, 'invoice_no' => 'INV-018', 'customer_name' => 'Rina Marlina', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '18-06-2026', 'due_date' => '02-07-2026', 'amount' => 2600000, 'status' => 'Pending'],
+    ['id' => 19, 'invoice_no' => 'INV-019', 'customer_name' => 'Siti Rahma', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '19-06-2026', 'due_date' => '03-07-2026', 'amount' => 7200000, 'status' => 'Paid'],
+    ['id' => 20, 'invoice_no' => 'INV-020', 'customer_name' => 'Teguh Firmansyah', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '20-06-2026', 'due_date' => '04-07-2026', 'amount' => 1850000, 'status' => 'Overdue'],
 
-    ['id' => 21, 'invoice_no' => 'INV-021', 'customer_name' => 'Umar Fadli', 'invoice_date' => '21-06-2026', 'due_date' => '05-07-2026', 'amount' => 4100000, 'status' => 'Paid'],
-    ['id' => 22, 'invoice_no' => 'INV-022', 'customer_name' => 'Vina Oktavia', 'invoice_date' => '22-06-2026', 'due_date' => '06-07-2026', 'amount' => 1500000, 'status' => 'Pending'],
-    ['id' => 23, 'invoice_no' => 'INV-023', 'customer_name' => 'Wahyu Hidayat', 'invoice_date' => '23-06-2026', 'due_date' => '07-07-2026', 'amount' => 5800000, 'status' => 'Paid'],
-    ['id' => 24, 'invoice_no' => 'INV-024', 'customer_name' => 'Yoga Prakoso', 'invoice_date' => '24-06-2026', 'due_date' => '08-07-2026', 'amount' => 2350000, 'status' => 'Unpaid'],
-    ['id' => 25, 'invoice_no' => 'INV-025', 'customer_name' => 'Zahra Nabila', 'invoice_date' => '25-06-2026', 'due_date' => '09-07-2026', 'amount' => 3150000, 'status' => 'Paid'],
-    ['id' => 26, 'invoice_no' => 'INV-026', 'customer_name' => 'Agus Salim', 'invoice_date' => '26-06-2026', 'due_date' => '10-07-2026', 'amount' => 4500000, 'status' => 'Pending'],
-    ['id' => 27, 'invoice_no' => 'INV-027', 'customer_name' => 'Bella Anindya', 'invoice_date' => '27-06-2026', 'due_date' => '11-07-2026', 'amount' => 5250000, 'status' => 'Paid'],
-    ['id' => 28, 'invoice_no' => 'INV-028', 'customer_name' => 'Cahyo Nugroho', 'invoice_date' => '28-06-2026', 'due_date' => '12-07-2026', 'amount' => 2100000, 'status' => 'Unpaid'],
-    ['id' => 29, 'invoice_no' => 'INV-029', 'customer_name' => 'Dian Permata', 'invoice_date' => '29-06-2026', 'due_date' => '13-07-2026', 'amount' => 3850000, 'status' => 'Paid'],
-    ['id' => 30, 'invoice_no' => 'INV-030', 'customer_name' => 'Fajar Maulana', 'invoice_date' => '30-06-2026', 'due_date' => '14-07-2026', 'amount' => 2750000, 'status' => 'Pending'],
+    ['id' => 21, 'invoice_no' => 'INV-021', 'customer_name' => 'Umar Fadli', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '21-06-2026', 'due_date' => '05-07-2026', 'amount' => 4100000, 'status' => 'Paid'],
+    ['id' => 22, 'invoice_no' => 'INV-022', 'customer_name' => 'Vina Oktavia', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '22-06-2026', 'due_date' => '06-07-2026', 'amount' => 1500000, 'status' => 'Pending'],
+    ['id' => 23, 'invoice_no' => 'INV-023', 'customer_name' => 'Wahyu Hidayat', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '23-06-2026', 'due_date' => '07-07-2026', 'amount' => 5800000, 'status' => 'Paid'],
+    ['id' => 24, 'invoice_no' => 'INV-024', 'customer_name' => 'Yoga Prakoso', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '24-06-2026', 'due_date' => '08-07-2026', 'amount' => 2350000, 'status' => 'Overdue'],
+    ['id' => 25, 'invoice_no' => 'INV-025', 'customer_name' => 'Zahra Nabila', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '25-06-2026', 'due_date' => '09-07-2026', 'amount' => 3150000, 'status' => 'Paid'],
+    ['id' => 26, 'invoice_no' => 'INV-026', 'customer_name' => 'Agus Salim', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '26-06-2026', 'due_date' => '10-07-2026', 'amount' => 4500000, 'status' => 'Pending'],
+    ['id' => 27, 'invoice_no' => 'INV-027', 'customer_name' => 'Bella Anindya', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '27-06-2026', 'due_date' => '11-07-2026', 'amount' => 5250000, 'status' => 'Paid'],
+    ['id' => 28, 'invoice_no' => 'INV-028', 'customer_name' => 'Cahyo Nugroho', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '28-06-2026', 'due_date' => '12-07-2026', 'amount' => 2100000, 'status' => 'Overdue'],
+    ['id' => 29, 'invoice_no' => 'INV-029', 'customer_name' => 'Dian Permata', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '29-06-2026', 'due_date' => '13-07-2026', 'amount' => 3850000, 'status' => 'Paid'],
+    ['id' => 30, 'invoice_no' => 'INV-030', 'customer_name' => 'Fajar Maulana', 'pic' => 'Rehan Rahmatullah', 'invoice_date' => '30-06-2026', 'due_date' => '14-07-2026', 'amount' => 2750000, 'status' => 'Pending'],
 ];
 
 function rupiah(int $n): string
@@ -97,7 +97,7 @@ function rupiah(int $n): string
                                 <ol class="breadcrumb float-sm-end">
                                     <li class="breadcrumb-item"><a href="../dashboard/dashboard.php"
                                             class="text-decoration-none">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Invoice</li>
+                                    <li class="breadcrumb-item active">Data Invoice</li>
                                 </ol>
                             </div>
                         </div>
@@ -141,13 +141,8 @@ function rupiah(int $n): string
 
                                 <div class="col-md-2">
                                     <label class="form-label">Customer</label>
-                                    <select id="customer" class="form-select form-select-sm">
-                                        <option value="">All Customer</option>
-                                        <option value="andi pratama">Andi Pratama</option>
-                                        <option value="budi santoso">Budi Santoso</option>
-                                        <option value="citra lestari">Citra Lestari</option>
-                                        <option value="dewi anggraini">Dewi Anggraini</option>
-                                    </select>
+                                    <input id="customer" class="form-control form-control-sm"
+                                        placeholder="Customer Name">
                                 </div>
 
                                 <div class="col-md-2">
@@ -156,7 +151,7 @@ function rupiah(int $n): string
                                         <option value="">All Status</option>
                                         <option value="paid">Paid</option>
                                         <option value="pending">Pending</option>
-                                        <option value="unpaid">Unpaid</option>
+                                        <option value="overdue">Overdue</option>
                                     </select>
                                 </div>
 
@@ -188,6 +183,7 @@ function rupiah(int $n): string
                                             <th style="width:50px" class="text-center">No</th>
                                             <th class="text-center">Invoice No</th>
                                             <th>Customer</th>
+                                            <th>Person in Charge</th>
                                             <th>Issue Date</th>
                                             <th>Due Date</th>
                                             <th class="text-end">Total Amount</th>
@@ -206,7 +202,7 @@ function rupiah(int $n): string
                                                     $badge = 'warning';
                                                     break;
 
-                                                case 'Unpaid':
+                                                case 'Overdue':
                                                     $badge = 'danger';
                                                     break;
 
@@ -220,6 +216,7 @@ function rupiah(int $n): string
                                                 <td class="text-center"><?= $i + 1 ?></td>
                                                 <td class="text-center"><?= htmlspecialchars($inv['invoice_no']) ?></td>
                                                 <td><?= htmlspecialchars($inv['customer_name']) ?></td>
+                                                <td><?= htmlspecialchars($inv['pic']) ?></td>
                                                 <td><?= $inv['invoice_date'] ?></td>
                                                 <td><?= $inv['due_date'] ?></td>
                                                 <td class="text-end fw-semibold"><?= rupiah($inv['amount']) ?></td>
@@ -237,7 +234,7 @@ function rupiah(int $n): string
                                                                     href="edit.php?id=<?= $inv['id']; ?>&from=table">
                                                                     <i class="bi bi-pencil-square me-1"></i> Edit</a></li>
                                                             <li><a class="dropdown-item text-info"
-                                                                    href="invoice.php?id=<?= $inv['id'] ?>">
+                                                                    href="invoice.php?id=<?= $inv['id'] ?>&no_invoice=<?= urlencode($inv['invoice_no']) ?>&customer=<?= urlencode($inv['customer_name']) ?>&pic=<?= urlencode($inv['pic']) ?>&total=<?= $inv['amount'] ?>&status=<?= urlencode($inv['status']) ?>">
                                                                     <i class="bi bi-eye"></i> Detail</a></li>
                                                             <li><a class="dropdown-item text-danger" href="#">
                                                                     <i class="bi bi-trash me-1"></i> Delete</a></li>
@@ -316,7 +313,7 @@ function rupiah(int $n): string
                         return false;
 
                     if (cust &&
-                        customerName !== cust)
+                        !customerName.includes(cust))
                         return false;
 
                     if (stat &&
